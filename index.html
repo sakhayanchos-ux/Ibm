@@ -3,30 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Бизнес-марафон — ПРОСМОТР ВСЕХ ЗАДАНИЙ</title>
+  <title>Бизнес-марафон — трекер заданий</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Марафон трекер">
   <meta name="theme-color" content="#FF769A">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: #F5F7FA;
       font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       padding: 20px 12px 40px;
       color: #1E2A2E;
     }
-
-    .container {
-      max-width: 750px;
-      margin: 0 auto;
-    }
-
+    .container { max-width: 750px; margin: 0 auto; }
     h1 {
       font-size: 1.9rem;
       font-weight: 800;
@@ -35,7 +25,6 @@
       letter-spacing: -0.3px;
       margin-bottom: 4px;
     }
-
     .subhead {
       text-align: center;
       color: #6B7F74;
@@ -49,7 +38,6 @@
       font-weight: 500;
       box-shadow: 0 1px 3px rgba(0,0,0,0.03);
     }
-
     .card {
       background: white;
       border-radius: 28px;
@@ -58,7 +46,6 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05);
       border: 1px solid #EDF0F2;
     }
-
     .card-title {
       font-weight: 700;
       font-size: 1.2rem;
@@ -67,19 +54,16 @@
       border-left: 4px solid #FF769A;
       padding-left: 12px;
     }
-
     .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px 16px;
     }
-
     .form-field {
       display: flex;
       flex-direction: column;
       gap: 6px;
     }
-
     .form-field label {
       font-size: 0.7rem;
       font-weight: 600;
@@ -87,7 +71,6 @@
       letter-spacing: 0.5px;
       color: #FF769A;
     }
-
     .form-field input, .form-field select {
       padding: 10px 12px;
       border-radius: 24px;
@@ -96,13 +79,11 @@
       font-size: 0.85rem;
       transition: 0.15s;
     }
-
     .form-field input:focus, .form-field select:focus {
       outline: none;
       border-color: #FF769A;
       box-shadow: 0 0 0 2px rgba(255,118,154,0.2);
     }
-
     .role-switch {
       display: flex;
       gap: 12px;
@@ -111,7 +92,6 @@
       padding: 4px;
       margin-bottom: 20px;
     }
-
     .role-btn {
       flex: 1;
       text-align: center;
@@ -123,26 +103,22 @@
       background: transparent;
       color: #4D675C;
     }
-
     .role-btn.active {
       background: white;
       color: #FF769A;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
-
     .tasks-list {
       display: flex;
       flex-direction: column;
       gap: 16px;
     }
-
     .task-item {
       background: #FEFEFE;
       border-radius: 20px;
       padding: 14px;
       border: 1px solid #EDF0F2;
     }
-
     .task-header {
       display: flex;
       justify-content: space-between;
@@ -151,13 +127,11 @@
       gap: 8px;
       margin-bottom: 10px;
     }
-
     .task-name {
       font-weight: 700;
       font-size: 0.9rem;
       color: #1E2A2E;
     }
-
     .task-stars {
       background: #FFF0F3;
       padding: 4px 10px;
@@ -166,7 +140,6 @@
       font-weight: 700;
       color: #FF769A;
     }
-
     .task-control {
       display: flex;
       align-items: center;
@@ -174,13 +147,11 @@
       flex-wrap: wrap;
       margin-top: 8px;
     }
-
     .task-control input[type="checkbox"] {
       width: 20px;
       height: 20px;
       accent-color: #4D675C;
     }
-
     .task-control input[type="number"] {
       width: 70px;
       padding: 8px 6px;
@@ -189,7 +160,6 @@
       text-align: center;
       font-size: 0.8rem;
     }
-
     .stats-summary {
       background: #FEF4F6;
       border-radius: 24px;
@@ -200,28 +170,23 @@
       flex-wrap: wrap;
       gap: 12px;
     }
-
     .stat-item {
       text-align: center;
     }
-
     .stat-number {
       font-size: 1.9rem;
       font-weight: 800;
       color: #FF769A;
     }
-
     .photo-area {
       margin: 16px 0 8px;
     }
-
     .photo-preview {
       display: flex;
       align-items: center;
       gap: 12px;
       flex-wrap: wrap;
     }
-
     .preview-img {
       max-width: 80px;
       max-height: 80px;
@@ -229,7 +194,6 @@
       object-fit: cover;
       border: 1px solid #DCE3E9;
     }
-
     .btn-outline {
       background: transparent;
       border: 1px solid #FF769A;
@@ -240,7 +204,6 @@
       color: #FF769A;
       cursor: pointer;
     }
-
     .btn-primary {
       background: #FF769A;
       border: none;
@@ -252,7 +215,6 @@
       cursor: pointer;
       text-align: center;
     }
-
     .btn-secondary {
       background: #EFF3F6;
       border: none;
@@ -263,14 +225,12 @@
       font-size: 0.8rem;
       cursor: pointer;
     }
-
     .flex-buttons {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
       margin: 16px 0 8px;
     }
-
     footer {
       text-align: center;
       font-size: 0.65rem;
@@ -282,7 +242,7 @@
 <body>
 <div class="container">
   <h1>🌟 БИЗНЕС-МАРАФОН</h1>
-  <div style="text-align: center;"><span class="subhead">3 недели · задания со звёздами · РЕЖИМ ПРОСМОТРА</span></div>
+  <div style="text-align: center;"><span class="subhead">3 недели · задания со звёздами</span></div>
 
   <!-- Данные участника -->
   <div class="card">
@@ -302,16 +262,16 @@
     <div class="role-btn" data-role="pro">🔥 ОПЫТНЫЙ</div>
   </div>
 
-  <!-- Список заданий по дням -->
-  <div class="card" id="tasksContainer">
-    <div class="card-title">📋 ВСЕ ЗАДАНИЯ (ОТКРЫТЫ)</div>
+  <!-- Список заданий -->
+  <div class="card">
+    <div class="card-title">📋 ЗАДАНИЯ МАРАФОНА</div>
     <div id="tasksList" class="tasks-list">Загрузка...</div>
   </div>
 
   <!-- Итоговая статистика -->
   <div class="card">
     <div class="card-title">⭐ СТАТИСТИКА</div>
-    <div class="stats-summary" id="statsBlock">
+    <div class="stats-summary">
       <div class="stat-item"><div class="stat-number" id="totalStars">0</div><div>ВСЕГО ⭐</div></div>
     </div>
   </div>
@@ -329,11 +289,11 @@
       <button class="btn-secondary" id="excelBtn">📎 Скачать Excel</button>
     </div>
   </div>
-  <footer>⚡ Режим просмотра: все задания доступны. Данные сохраняются автоматически.</footer>
+  <footer>⚡ Данные сохраняются автоматически. Все задания открыты для просмотра.</footer>
 </div>
 
 <script>
-  // ---------- РАСПИСАНИЕ ЗАДАНИЙ (из ТЗ, ВСЕ ОТКРЫТЫ) ----------
+  // ---------- РАСПИСАНИЕ ЗАДАНИЙ ----------
   const TASKS_SCHEDULE = [
     { date: "2026-06-15", title: "Задание 1 — 15 июня", tasks: {
       newbie: [
@@ -543,6 +503,144 @@
     });
   }
 
+  // Функция для генерации подробного текстового отчёта для WhatsApp
+  function generateReportText() {
+    const fullname = document.getElementById('fullname').value || 'Участник';
+    const status = document.getElementById('status').value || 'НП';
+    const discount = document.getElementById('discount').value || '0';
+    const consultant = document.getElementById('consultant').value || 'не указан';
+    const tabTeam = document.getElementById('tabTeam').value || 'не указан';
+    const roleName = role === 'newbie' ? 'Новичок' : 'Опытный';
+    const totalStars = document.getElementById('totalStars').innerText;
+    
+    let report = `🏆 ОТЧЁТ ПО МАРАФОНУ\n\n`;
+    report += `👤 УЧАСТНИК:\n`;
+    report += `ФИО: ${fullname}\n`;
+    report += `Статус: ${status}\n`;
+    report += `Роль: ${roleName}\n`;
+    report += `Скидка: ${discount}%\n`;
+    report += `Консультант: ${consultant}\n`;
+    report += `Вышестоящий Tab Team: ${tabTeam}\n\n`;
+    report += `⭐ ЗАДАНИЯ:\n\n`;
+    
+    let totalStarsCheck = 0;
+    
+    TASKS_SCHEDULE.forEach((schedule, idx) => {
+      const tasksList = schedule.tasks[role] || [];
+      if(tasksList.length === 0) return;
+      
+      report += `📅 ${schedule.title}\n`;
+      let dayStars = 0;
+      
+      tasksList.forEach((t, tIdx) => {
+        const storageKey = getTaskKey(idx, schedule.date, tIdx);
+        let raw = progress[storageKey];
+        let display = '';
+        let starGain = 0;
+        
+        if(t.type === 'checkbox') {
+          if(raw === true) {
+            display = '✅ Да';
+            starGain = t.stars;
+          } else {
+            display = '❌ Нет';
+            starGain = 0;
+          }
+        } else {
+          const qty = raw || 0;
+          display = `${qty} шт`;
+          starGain = qty * t.stars;
+        }
+        
+        dayStars += starGain;
+        totalStarsCheck += starGain;
+        report += `${display} — ${t.text} — ${starGain}⭐\n`;
+      });
+      
+      report += `⭐ За день: ${dayStars}⭐\n\n`;
+    });
+    
+    report += `━━━━━━━━━━━━━━━━━━━━\n`;
+    report += `⭐ ВСЕГО ЗВЁЗД: ${totalStarsCheck}\n`;
+    report += `📅 Дата отчёта: ${new Date().toLocaleDateString()}\n`;
+    
+    return report;
+  }
+
+  // Функция отправки WhatsApp с полным отчётом
+  async function sendWhatsApp() {
+    const reportText = generateReportText();
+    const encodedText = encodeURIComponent(reportText);
+    
+    if(currentPhotoData && navigator.share) {
+      try {
+        const blob = await (await fetch(currentPhotoData)).blob();
+        const file = new File([blob], "report_photo.jpg", { type: "image/jpeg" });
+        await navigator.share({
+          title: "Мой отчёт по марафону",
+          text: reportText,
+          files: [file]
+        });
+      } catch(e) { 
+        // Если шеринг не удался, открываем WhatsApp с текстом
+        window.open(`https://wa.me/?text=${encodedText}`, '_blank');
+      }
+    } else {
+      // Открываем WhatsApp с текстом (без фото)
+      window.open(`https://wa.me/?text=${encodedText}`, '_blank');
+    }
+  }
+
+  function exportExcel() {
+    let csvRows = [];
+    
+    // ШАПКА С ДАННЫМИ УЧАСТНИКА
+    csvRows.push(['ДАННЫЕ УЧАСТНИКА', '']);
+    csvRows.push(['ФИО', document.getElementById('fullname').value || '']);
+    csvRows.push(['Статус (НП / Супервайзер)', document.getElementById('status').value || '']);
+    csvRows.push(['Скидка (%)', document.getElementById('discount').value || '0']);
+    csvRows.push(['Консультант', document.getElementById('consultant').value || '']);
+    csvRows.push(['Вышестоящий Tab Team', document.getElementById('tabTeam').value || '']);
+    csvRows.push(['Роль в марафоне', role === 'newbie' ? 'Новичок' : 'Опытный']);
+    csvRows.push(['Дата выгрузки', new Date().toLocaleString()]);
+    csvRows.push([]);
+    
+    // ЗАГОЛОВКИ ЗАДАНИЙ
+    csvRows.push(['Дата', 'Задание', 'Выполнено / Кол-во', 'Звёзды']);
+    
+    let totalStarsExport = 0;
+    TASKS_SCHEDULE.forEach((schedule, idx) => {
+      const tasksList = schedule.tasks[role] || [];
+      tasksList.forEach((t, tIdx) => {
+        const key = getTaskKey(idx, schedule.date, tIdx);
+        let raw = progress[key];
+        let display = '';
+        let starGain = 0;
+        if(t.type === 'checkbox') {
+          display = raw ? '✅ Да' : '❌ Нет';
+          starGain = raw ? t.stars : 0;
+        } else {
+          const qty = raw || 0;
+          display = `${qty} шт`;
+          starGain = qty * t.stars;
+        }
+        totalStarsExport += starGain;
+        csvRows.push([schedule.date, t.text, display, starGain]);
+      });
+    });
+    
+    csvRows.push([]);
+    csvRows.push(['ИТОГО ЗВЁЗД', '', '', totalStarsExport]);
+    
+    const csvContent = csvRows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(';')).join('\n');
+    const blob = new Blob(["\uFEFF" + csvContent], {type: 'text/csv;charset=utf-8;'});
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `marathon_report_${document.getElementById('fullname').value || 'участник'}_${new Date().toISOString().slice(0,10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
+
   document.getElementById('addPhotoBtn').addEventListener('click', () => {
     document.getElementById('photoInput').click();
   });
@@ -569,51 +667,6 @@
     } else {
       container.innerHTML = '';
     }
-  }
-
-  async function sendWhatsApp() {
-    const fullname = document.getElementById('fullname').value || 'Участник';
-    const status = document.getElementById('status').value || 'НП';
-    const consultant = document.getElementById('consultant').value || 'консультант';
-    const totalStars = document.getElementById('totalStars').innerText;
-    const textReport = `🏆 ОТЧЁТ ПО МАРАФОНУ\nУчастник: ${fullname}\nСтатус: ${status}\nКонсультант: ${consultant}\n⭐ Всего звёзд: ${totalStars}\nДата отчёта: ${new Date().toLocaleDateString()}`;
-    
-    if(currentPhotoData && navigator.share) {
-      try {
-        const blob = await (await fetch(currentPhotoData)).blob();
-        const file = new File([blob], "report_photo.jpg", { type: "image/jpeg" });
-        await navigator.share({
-          title: "Мой отчёт",
-          text: textReport,
-          files: [file]
-        });
-      } catch(e) { alert("Ошибка шеринга"); }
-    } else {
-      const waLink = `https://wa.me/?text=${encodeURIComponent(textReport)}`;
-      window.open(waLink, '_blank');
-    }
-  }
-
-  function exportExcel() {
-    let csvRows = [];
-    csvRows.push(['Дата','Задание','Выполнено/Кол-во','Звёзды'].join(';'));
-    TASKS_SCHEDULE.forEach((schedule, idx) => {
-      const tasksList = schedule.tasks[role] || [];
-      tasksList.forEach((t, tIdx) => {
-        const key = getTaskKey(idx, schedule.date, tIdx);
-        let raw = progress[key];
-        let display = (t.type === 'checkbox') ? (raw ? '✅ Да' : '❌ Нет') : (raw || 0);
-        let starGain = computeStarsForTask(t, t.type, t.type === 'checkbox' ? raw : raw);
-        csvRows.push([schedule.date, t.text, display, starGain].join(';'));
-      });
-    });
-    csvRows.push([],['ИТОГО ЗВЁЗД', document.getElementById('totalStars').innerText].join(';'));
-    const blob = new Blob(["\uFEFF" + csvRows.join('\n')], {type: 'text/csv;charset=utf-8;'});
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `marathon_report_${new Date().toISOString().slice(0,10)}.csv`;
-    link.click();
-    URL.revokeObjectURL(link.href);
   }
 
   document.querySelectorAll('.role-btn').forEach(btn => {
