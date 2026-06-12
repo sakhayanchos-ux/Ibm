@@ -129,76 +129,108 @@
       align-items: baseline;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed #FF769A30;
     }
     .task-name {
       font-weight: 700;
-      font-size: 0.85rem;
-      color: #1E2A2E;
+      font-size: 0.9rem;
+      color: #FF769A;
     }
-    .task-stars {
+    .task-day-stars {
       background: #FFF0F3;
-      padding: 4px 10px;
+      padding: 4px 12px;
       border-radius: 40px;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 700;
       color: #FF769A;
     }
-    .task-control {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 8px;
+    /* таблица внутри задания */
+    .task-table {
+      width: 100%;
+      border-collapse: collapse;
       font-size: 0.75rem;
     }
-    .task-control input[type="checkbox"] {
+    .task-table th {
+      text-align: left;
+      padding: 8px 4px 4px 0;
+      color: #4D675C;
+      font-weight: 600;
+      border-bottom: 1px solid #EDF0F2;
+    }
+    .task-table td {
+      padding: 8px 4px;
+      border-bottom: 1px solid #EDF0F2;
+      vertical-align: middle;
+    }
+    .task-table .col-check {
+      width: 80px;
+      text-align: center;
+    }
+    .task-table .col-stars {
+      width: 60px;
+      text-align: center;
+      font-weight: 600;
+      color: #FF769A;
+    }
+    .task-table input[type="checkbox"] {
       width: 20px;
       height: 20px;
       accent-color: #4D675C;
     }
-    .task-control input[type="text"] {
+    .task-table input[type="text"] {
       width: 70px;
-      padding: 8px 6px;
+      padding: 6px;
       border-radius: 30px;
       border: 1px solid #DCE3E9;
       text-align: center;
-      font-size: 0.75rem;
       background: white;
     }
-    .stats-summary {
-      background: #FEF4F6;
-      border-radius: 24px;
-      padding: 14px;
+    .photo-gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
       margin-top: 12px;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
     }
-    .stat-item {
-      text-align: center;
-    }
-    .stat-number {
-      font-size: 1.9rem;
-      font-weight: 800;
-      color: #FF769A;
-    }
-    .photo-area {
-      margin: 16px 0 8px;
-    }
-    .photo-preview {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
+    .photo-item {
+      position: relative;
+      display: inline-block;
     }
     .preview-img {
-      max-width: 80px;
-      max-height: 80px;
+      width: 70px;
+      height: 70px;
       border-radius: 16px;
       object-fit: cover;
       border: 1px solid #DCE3E9;
+    }
+    .delete-photo {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #FF769A;
+      color: white;
+      border-radius: 20px;
+      width: 22px;
+      height: 22px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+    }
+    .total-stars-block {
+      background: linear-gradient(135deg, #FF769A, #FF98B5);
+      color: white;
+      padding: 16px;
+      border-radius: 60px;
+      text-align: center;
+      margin: 20px 0 10px;
+    }
+    .total-stars-number {
+      font-size: 2.5rem;
+      font-weight: 800;
     }
     .btn-outline {
       background: transparent;
@@ -219,7 +251,6 @@
       color: white;
       font-size: 0.8rem;
       cursor: pointer;
-      text-align: center;
     }
     .btn-secondary {
       background: #EFF3F6;
@@ -248,7 +279,7 @@
 <body>
 <div class="container">
   <h1>🌟 БИЗНЕС-МАРАФОН</h1>
-  <div style="text-align: center;"><span class="subhead">3 недели · задания со звёздами</span></div>
+  <div class="subhead">3 недели · задания со звёздами</div>
 
   <!-- Данные участника -->
   <div class="card">
@@ -274,32 +305,30 @@
     <div id="tasksList" class="tasks-list">Загрузка...</div>
   </div>
 
-  <!-- Итоговая статистика -->
-  <div class="card">
-    <div class="card-title">⭐ СТАТИСТИКА</div>
-    <div class="stats-summary">
-      <div class="stat-item"><div class="stat-number" id="totalStars">0</div><div>ВСЕГО ⭐</div></div>
-    </div>
+  <!-- Общий итог звёзд -->
+  <div class="total-stars-block">
+    <div>⭐ ВСЕГО ЗВЁЗД ЗА МАРАФОН</div>
+    <div class="total-stars-number" id="totalStars">0</div>
   </div>
 
   <!-- Фото + кнопки -->
   <div class="card">
-    <div class="card-title">📸 ПОДТВЕРЖДЕНИЕ (ФОТО)</div>
+    <div class="card-title">📸 ФОТО (до 10 штук)</div>
     <div class="photo-area">
-      <input type="file" id="photoInput" accept="image/*" style="display:none">
+      <input type="file" id="photoInput" accept="image/*" style="display:none" multiple>
       <button class="btn-outline" id="addPhotoBtn">➕ Добавить фото</button>
-      <div id="photoPreview" class="photo-preview" style="margin-top: 12px;"></div>
+      <div id="photoGallery" class="photo-gallery"></div>
     </div>
     <div class="flex-buttons">
       <button class="btn-primary" id="whatsappBtn">📤 Отправить консультанту (WhatsApp)</button>
       <button class="btn-secondary" id="excelBtn">📎 Скачать Excel</button>
     </div>
   </div>
-  <footer>⚡ Данные сохраняются автоматически. Все задания открыты для просмотра.</footer>
+  <footer>⚡ Данные сохраняются автоматически. Все задания открыты.</footer>
 </div>
 
 <script>
-  // КОРОТКИЕ ВЕРСИИ ЗАДАНИЙ (для компактной таблицы)
+  // КОРОТКИЕ ВЕРСИИ ЗАДАНИЙ
   const TASKS_SCHEDULE = [
     { date: "2026-06-15", title: "Задание 1 — 15 июня", tasks: {
       newbie: [
@@ -398,10 +427,10 @@
     }}
   ];
 
-  const STORAGE_KEY = "marathon_tracker_v2";
+  const STORAGE_KEY = "marathon_tracker_v3";
   let role = "newbie";
   let progress = {};
-  let currentPhotoData = null;
+  let photos = []; // массив base64
 
   function loadData() {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -410,7 +439,7 @@
         const data = JSON.parse(saved);
         progress = data.progress || {};
         role = data.role || "newbie";
-        currentPhotoData = data.photo || null;
+        photos = data.photos || [];
         document.getElementById('fullname').value = data.fullname || '';
         document.getElementById('status').value = data.status || '';
         document.getElementById('discount').value = data.discount || '0';
@@ -428,7 +457,7 @@
     const store = {
       progress: progress,
       role: role,
-      photo: currentPhotoData,
+      photos: photos,
       fullname: document.getElementById('fullname').value,
       status: document.getElementById('status').value,
       discount: document.getElementById('discount').value,
@@ -436,12 +465,6 @@
       tabTeam: document.getElementById('tabTeam').value,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
-  }
-
-  function computeStarsForTask(task, type, value) {
-    if(type === 'checkbox') return value ? task.stars : 0;
-    if(type === 'quantity') return (parseInt(value) || 0) * task.stars;
-    return 0;
   }
 
   function getTaskKey(idx, date, tIdx) {
@@ -457,39 +480,44 @@
       const tasksList = schedule.tasks[role] || [];
       if(!tasksList.length) return;
 
-      let taskCompletedStars = 0;
-      tasksList.forEach((t, tIdx) => {
-        const storageKey = getTaskKey(idx, schedule.date, tIdx);
-        let userValue = false;
-        let quantityVal = 0;
-        if(progress[storageKey]) {
-          if(t.type === 'checkbox') userValue = progress[storageKey] === true;
-          if(t.type === 'quantity') quantityVal = progress[storageKey] || 0;
-        }
-        const starGain = computeStarsForTask(t, t.type, t.type === 'checkbox' ? userValue : quantityVal);
-        taskCompletedStars += starGain;
-      });
-      totalStars += taskCompletedStars;
-
-      html += `<div class="task-item">`;
-      html += `<div class="task-header"><div class="task-name">📅 ${schedule.title}</div><div class="task-stars">⭐ ${taskCompletedStars}</div></div>`;
-
-      tasksList.forEach((t, tIdx) => {
-        const storageKey = getTaskKey(idx, schedule.date, tIdx);
-        let val = progress[storageKey];
+      let dayTotalStars = 0;
+      const taskRows = tasksList.map((t, tIdx) => {
+        const key = getTaskKey(idx, schedule.date, tIdx);
+        let val = progress[key];
+        let starGain = 0;
+        let inputHtml = '';
         if(t.type === 'checkbox') {
           const checked = val === true;
-          html += `<div class="task-control"><input type="checkbox" data-key="${storageKey}" data-type="checkbox" ${checked ? 'checked' : ''}> <span>${t.text} (${t.stars}⭐)</span></div>`;
+          starGain = checked ? t.stars : 0;
+          inputHtml = `<input type="checkbox" data-key="${key}" data-type="checkbox" ${checked ? 'checked' : ''}>`;
         } else {
           const qty = val || '';
-          html += `<div class="task-control"><span>${t.text} (${t.stars}⭐/шт)</span> <input type="text" inputmode="numeric" value="${qty}" data-key="${storageKey}" data-type="quantity" placeholder="0"></div>`;
+          starGain = (parseInt(qty) || 0) * t.stars;
+          inputHtml = `<input type="text" inputmode="numeric" value="${qty}" data-key="${key}" data-type="quantity" placeholder="0">`;
         }
-      });
-      html += `</div>`;
+        dayTotalStars += starGain;
+        return `<tr><td>${t.text}</td><td class="col-check">${inputHtml}</td><td class="col-stars">${starGain}⭐</td></tr>`;
+      }).join('');
+
+      totalStars += dayTotalStars;
+
+      html += `
+        <div class="task-item">
+          <div class="task-header">
+            <span class="task-name">📅 ${schedule.title}</span>
+            <span class="task-day-stars">⭐ За день: ${dayTotalStars}</span>
+          </div>
+          <table class="task-table">
+            <tr><th>Задание</th><th>Выполнено</th><th>⭐</th></tr>
+            ${taskRows}
+          </table>
+        </div>
+      `;
     });
     container.innerHTML = html;
     document.getElementById('totalStars').innerText = totalStars;
 
+    // привязываем события
     document.querySelectorAll('[data-key]').forEach(el => {
       if(el.type === 'checkbox') {
         el.addEventListener('change', (e) => {
@@ -502,7 +530,6 @@
         el.addEventListener('input', (e) => {
           const key = e.target.dataset.key;
           let val = e.target.value.replace(/[^0-9]/g, '');
-          if(val === '') val = '';
           progress[key] = val === '' ? 0 : parseInt(val);
           saveAll();
           renderTasks();
@@ -511,94 +538,67 @@
     });
   }
 
-  function generateReportText() {
+  // Фото: несколько
+  function renderPhotoGallery() {
+    const gallery = document.getElementById('photoGallery');
+    if(!gallery) return;
+    gallery.innerHTML = '';
+    photos.forEach((photo, idx) => {
+      const div = document.createElement('div');
+      div.className = 'photo-item';
+      div.innerHTML = `<img src="${photo}" class="preview-img"><button class="delete-photo" data-idx="${idx}">✕</button>`;
+      gallery.appendChild(div);
+    });
+    document.querySelectorAll('.delete-photo').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const idx = parseInt(btn.dataset.idx);
+        photos.splice(idx, 1);
+        saveAll();
+        renderPhotoGallery();
+      });
+    });
+  }
+
+  document.getElementById('addPhotoBtn').addEventListener('click', () => {
+    document.getElementById('photoInput').click();
+  });
+  document.getElementById('photoInput').addEventListener('change', (e) => {
+    if(e.target.files) {
+      Array.from(e.target.files).forEach(file => {
+        if(photos.length >= 10) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          photos.push(ev.target.result);
+          saveAll();
+          renderPhotoGallery();
+        };
+        reader.readAsDataURL(file);
+      });
+      e.target.value = '';
+    }
+  });
+
+  // WhatsApp: текст + все фото
+  async function sendWhatsApp() {
     const fullname = document.getElementById('fullname').value || 'Участник';
     const status = document.getElementById('status').value || 'НП';
     const discount = document.getElementById('discount').value || '0';
     const consultant = document.getElementById('consultant').value || 'не указан';
     const tabTeam = document.getElementById('tabTeam').value || 'не указан';
     const roleName = role === 'newbie' ? 'Новичок' : 'Опытный';
+    const totalStars = document.getElementById('totalStars').innerText;
     
-    let report = `🏆 ОТЧЁТ ПО МАРАФОНУ\n\n`;
-    report += `👤 УЧАСТНИК:\nФИО: ${fullname}\nСтатус: ${status}\nРоль: ${roleName}\nСкидка: ${discount}%\nКонсультант: ${consultant}\nTab Team: ${tabTeam}\n\n`;
-    report += `⭐ ЗАДАНИЯ:\n\n`;
-    
-    let totalStarsCheck = 0;
+    let report = `🏆 ОТЧЁТ ПО МАРАФОНУ\n\n👤 УЧАСТНИК:\nФИО: ${fullname}\nСтатус: ${status}\nРоль: ${roleName}\nСкидка: ${discount}%\nКонсультант: ${consultant}\nTab Team: ${tabTeam}\n\n⭐ ЗАДАНИЯ:\n`;
     
     TASKS_SCHEDULE.forEach((schedule, idx) => {
       const tasksList = schedule.tasks[role] || [];
       if(tasksList.length === 0) return;
-      
-      report += `📅 ${schedule.title}\n`;
+      report += `\n📅 ${schedule.title}\n`;
       let dayStars = 0;
-      
-      tasksList.forEach((t, tIdx) => {
-        const storageKey = getTaskKey(idx, schedule.date, tIdx);
-        let raw = progress[storageKey];
-        let display = '';
-        let starGain = 0;
-        
-        if(t.type === 'checkbox') {
-          if(raw === true) {
-            display = '✅ Да';
-            starGain = t.stars;
-          } else {
-            display = '❌ Нет';
-            starGain = 0;
-          }
-        } else {
-          const qty = raw || 0;
-          display = `${qty} шт`;
-          starGain = qty * t.stars;
-        }
-        
-        dayStars += starGain;
-        totalStarsCheck += starGain;
-        report += `${display} — ${t.text} — ${starGain}⭐\n`;
-      });
-      
-      report += `⭐ За день: ${dayStars}⭐\n\n`;
-    });
-    
-    report += `━━━━━━━━━━━━━━━━━━━━\n⭐ ВСЕГО ЗВЁЗД: ${totalStarsCheck}\n📅 ${new Date().toLocaleDateString()}\n`;
-    return report;
-  }
-
-  async function sendWhatsApp() {
-    const reportText = generateReportText();
-    const encodedText = encodeURIComponent(reportText);
-    
-    if(currentPhotoData && navigator.share) {
-      try {
-        const blob = await (await fetch(currentPhotoData)).blob();
-        const file = new File([blob], "report_photo.jpg", { type: "image/jpeg" });
-        await navigator.share({ title: "Мой отчёт по марафону", text: reportText, files: [file] });
-      } catch(e) { window.open(`https://wa.me/?text=${encodedText}`, '_blank'); }
-    } else {
-      window.open(`https://wa.me/?text=${encodedText}`, '_blank');
-    }
-  }
-
-  function exportExcel() {
-    let csvRows = [];
-    csvRows.push(['ДАННЫЕ УЧАСТНИКА', '']);
-    csvRows.push(['ФИО', document.getElementById('fullname').value || '']);
-    csvRows.push(['Статус', document.getElementById('status').value || '']);
-    csvRows.push(['Скидка (%)', document.getElementById('discount').value || '0']);
-    csvRows.push(['Консультант', document.getElementById('consultant').value || '']);
-    csvRows.push(['Вышестоящий Tab Team', document.getElementById('tabTeam').value || '']);
-    csvRows.push(['Роль', role === 'newbie' ? 'Новичок' : 'Опытный']);
-    csvRows.push(['Дата', new Date().toLocaleString()]);
-    csvRows.push([]);
-    csvRows.push(['Дата', 'Задание', 'Выполнено', 'Звёзды']);
-    
-    let totalStarsExport = 0;
-    TASKS_SCHEDULE.forEach((schedule, idx) => {
-      const tasksList = schedule.tasks[role] || [];
       tasksList.forEach((t, tIdx) => {
         const key = getTaskKey(idx, schedule.date, tIdx);
         let raw = progress[key];
-        let display = '', starGain = 0;
+        let starGain = 0, display = '';
         if(t.type === 'checkbox') {
           display = raw ? '✅ Да' : '❌ Нет';
           starGain = raw ? t.stars : 0;
@@ -607,35 +607,66 @@
           display = `${qty} шт`;
           starGain = qty * t.stars;
         }
-        totalStarsExport += starGain;
-        csvRows.push([schedule.date, t.text, display, starGain]);
+        dayStars += starGain;
+        report += `${display} — ${t.text} — ${starGain}⭐\n`;
+      });
+      report += `⭐ За день: ${dayStars}⭐\n`;
+    });
+    report += `\n━━━━━━━━━━━━━━━━━━━━\n⭐ ВСЕГО ЗВЁЗД: ${totalStars}\n📅 ${new Date().toLocaleDateString()}`;
+    
+    // Отправка с фото
+    if(photos.length > 0 && navigator.share) {
+      try {
+        const files = await Promise.all(photos.map(async (base64, i) => {
+          const blob = await (await fetch(base64)).blob();
+          return new File([blob], `photo_${i+1}.jpg`, { type: "image/jpeg" });
+        }));
+        await navigator.share({ title: "Мой отчёт", text: report, files });
+      } catch(e) { window.open(`https://wa.me/?text=${encodeURIComponent(report)}`, '_blank'); }
+    } else {
+      window.open(`https://wa.me/?text=${encodeURIComponent(report)}`, '_blank');
+    }
+  }
+
+  function exportExcel() {
+    let rows = [['ДАННЫЕ УЧАСТНИКА',''],['ФИО', document.getElementById('fullname').value || '']];
+    rows.push(['Статус', document.getElementById('status').value || '']);
+    rows.push(['Скидка (%)', document.getElementById('discount').value || '0']);
+    rows.push(['Консультант', document.getElementById('consultant').value || '']);
+    rows.push(['Вышестоящий Tab Team', document.getElementById('tabTeam').value || '']);
+    rows.push(['Роль', role === 'newbie' ? 'Новичок' : 'Опытный']);
+    rows.push(['Дата', new Date().toLocaleString()]);
+    rows.push([]);
+    rows.push(['Дата','Задание','Выполнено','Звёзды']);
+    
+    let total = 0;
+    TASKS_SCHEDULE.forEach((schedule, idx) => {
+      const tasksList = schedule.tasks[role] || [];
+      tasksList.forEach((t, tIdx) => {
+        const key = getTaskKey(idx, schedule.date, tIdx);
+        let raw = progress[key];
+        let display = '', stars = 0;
+        if(t.type === 'checkbox') {
+          display = raw ? '✅ Да' : '❌ Нет';
+          stars = raw ? t.stars : 0;
+        } else {
+          const qty = raw || 0;
+          display = `${qty} шт`;
+          stars = qty * t.stars;
+        }
+        total += stars;
+        rows.push([schedule.date, t.text, display, stars]);
       });
     });
-    csvRows.push([], ['ИТОГО ЗВЁЗД', '', '', totalStarsExport]);
+    rows.push([],['ИТОГО ЗВЁЗД', '', '', total]);
     
-    const csvContent = csvRows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(';')).join('\n');
-    const blob = new Blob(["\uFEFF" + csvContent], {type: 'text/csv;charset=utf-8;'});
+    const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(';')).join('\n');
+    const blob = new Blob(["\uFEFF" + csv], {type: 'text/csv;charset=utf-8;'});
     const link = document.createElement('a');
-    link.download = `marathon_report_${document.getElementById('fullname').value || 'участник'}_${new Date().toISOString().slice(0,10)}.csv`;
+    link.download = `marathon_${document.getElementById('fullname').value || 'report'}.csv`;
     link.href = URL.createObjectURL(blob);
     link.click();
     URL.revokeObjectURL(link.href);
-  }
-
-  document.getElementById('addPhotoBtn').addEventListener('click', () => document.getElementById('photoInput').click());
-  document.getElementById('photoInput').addEventListener('change', (e) => {
-    if(e.target.files && e.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (ev) => { currentPhotoData = ev.target.result; saveAll(); showPhotoPreview(); };
-      reader.readAsDataURL(e.target.files[0]);
-    }
-  });
-  function showPhotoPreview() {
-    const container = document.getElementById('photoPreview');
-    if(currentPhotoData) {
-      container.innerHTML = `<img src="${currentPhotoData}" class="preview-img"><button class="btn-outline" id="removePhotoBtn">Удалить</button>`;
-      document.getElementById('removePhotoBtn')?.addEventListener('click', () => { currentPhotoData = null; saveAll(); showPhotoPreview(); });
-    } else { container.innerHTML = ''; }
   }
 
   document.querySelectorAll('.role-btn').forEach(btn => {
@@ -657,7 +688,7 @@
 
   loadData();
   renderTasks();
-  showPhotoPreview();
+  renderPhotoGallery();
 </script>
 </body>
 </html>
