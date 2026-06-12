@@ -4,10 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Бизнес-марафон — трекер заданий</title>
+  
+  <!-- ИКОНКА: положи свою картинку ikonka.jpg в ту же папку -->
+  <link rel="icon" type="image/jpeg" href="ikonka.jpg">
+  <link rel="apple-touch-icon" href="ikonka.jpg">
+  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22%D0%91%D0%B8%D0%B7%D0%BD%D0%B5%D1%81-%D0%BC%D0%B0%D1%80%D0%B0%D1%84%D0%BE%D0%BD%22%2C%22short_name%22%3A%22%D0%9C%D0%B0%D1%80%D0%B0%D1%84%D0%BE%D0%BD%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F5F7FA%22%2C%22theme_color%22%3A%22%23FF769A%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22ikonka.jpg%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fjpeg%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Марафон трекер">
+  <meta name="apple-mobile-web-app-title" content="Марафон">
   <meta name="theme-color" content="#FF769A">
+  
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -16,7 +22,7 @@
       padding: 20px 12px 40px;
       color: #1E2A2E;
     }
-    .container { max-width: 750px; margin: 0 auto; }
+    .container { max-width: 800px; margin: 0 auto; }
     h1 {
       font-size: 1.9rem;
       font-weight: 800;
@@ -77,7 +83,6 @@
       border: 1px solid #E2E8F0;
       background: white;
       font-size: 0.85rem;
-      transition: 0.15s;
     }
     .form-field input:focus {
       outline: none;
@@ -99,7 +104,6 @@
       border-radius: 60px;
       font-weight: 600;
       cursor: pointer;
-      transition: 0.1s;
       background: transparent;
       color: #4D675C;
     }
@@ -129,7 +133,7 @@
     }
     .task-name {
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #1E2A2E;
     }
     .task-stars {
@@ -146,6 +150,7 @@
       gap: 12px;
       flex-wrap: wrap;
       margin-top: 8px;
+      font-size: 0.75rem;
     }
     .task-control input[type="checkbox"] {
       width: 20px;
@@ -153,12 +158,12 @@
       accent-color: #4D675C;
     }
     .task-control input[type="text"] {
-      width: 80px;
+      width: 70px;
       padding: 8px 6px;
       border-radius: 30px;
       border: 1px solid #DCE3E9;
       text-align: center;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       background: white;
     }
     .stats-summary {
@@ -294,101 +299,101 @@
 </div>
 
 <script>
-  // ---------- РАСПИСАНИЕ ЗАДАНИЙ ----------
+  // КОРОТКИЕ ВЕРСИИ ЗАДАНИЙ (для компактной таблицы)
   const TASKS_SCHEDULE = [
     { date: "2026-06-15", title: "Задание 1 — 15 июня", tasks: {
       newbie: [
-        { text: "Выложить макеты готовые", stars: 1, type: "checkbox" },
-        { text: "Сфоткать продукт свой или клубный под фото подпись (принимаю заказы …)", stars: 1, type: "checkbox" },
-        { text: "Скинуть результаты готовые или свой по желанию в соц сети (статус)", stars: 1, type: "checkbox" }
+        { text: "Выложить макеты", stars: 1, type: "checkbox" },
+        { text: "Сфоткать продукт с подписью", stars: 1, type: "checkbox" },
+        { text: "Скинуть результаты в соцсети", stars: 1, type: "checkbox" }
       ],
       pro: [
-        { text: "Изучить с наставником все возможности бизнеса Гербалайф и сухой остаток выложить кружочком в чат ИБМ", stars: 2, type: "checkbox" },
-        { text: "20 рассылок в день + 3 номера с соц опрос ежедневно", stars: 10, type: "checkbox" },
-        { text: "Позвать на вдв за каждого 1 человека", stars: 1, type: "quantity" }
+        { text: "Изучить бизнес с наставником", stars: 2, type: "checkbox" },
+        { text: "20 рассылок + 3 соцопроса", stars: 10, type: "checkbox" },
+        { text: "Позвать на ВДВ (за 1 чел.)", stars: 1, type: "quantity" }
       ]
     }},
     { date: "2026-06-18", title: "Задание 2 — 18 июня", tasks: {
       newbie: [
-        { text: "Рассказать коротко о кальции, продать (выложить принимаю заказы) в сторис в чат", stars: 2, type: "checkbox" },
-        { text: "Подарить подарочный сертификат 10 знакомым в личку", stars: 5, type: "checkbox" },
-        { text: "Выложить сертификат в соц сети (самым быстрым подарю)", stars: 5, type: "checkbox" }
+        { text: "Рассказать о кальции + продажа", stars: 2, type: "checkbox" },
+        { text: "Подарить сертификат 10 знакомым", stars: 5, type: "checkbox" },
+        { text: "Выложить сертификат в соцсети", stars: 5, type: "checkbox" }
       ],
       pro: [
-        { text: "Найти свою соц сети и выложить 5 сторисов в день ежедневно - за день", stars: 3, type: "checkbox" },
-        { text: "посещать все ВДВ АУ после ау записать кружочек в чат на 1 минуту отзыв и скрин", stars: 5, type: "checkbox" }
+        { text: "5 сторисов в день", stars: 3, type: "checkbox" },
+        { text: "ВДВ/АУ + кружочек в чат", stars: 5, type: "checkbox" }
       ]
     }},
     { date: "2026-06-21", title: "Задание 3 — 21 июня", tasks: {
       newbie: [
-        { text: "Написать свою историю исходя из готового шаблона под себя", stars: 3, type: "checkbox" },
-        { text: "программа снижения рассказать и выложить, продать в чат и в соц сеть", stars: 2, type: "checkbox" },
-        { text: "Джим Рон посмотреть видео и написать инсайты в чат Cезоны жизни", stars: 2, type: "checkbox" }
+        { text: "Написать историю по шаблону", stars: 3, type: "checkbox" },
+        { text: "Рассказать о программе снижения", stars: 2, type: "checkbox" },
+        { text: "Джим Рон + инсайты в чат", stars: 2, type: "checkbox" }
       ],
       pro: [
-        { text: "Провести консультацию по питанию для 5 знакомым рассказать о возможностях бизнеса - фото в чат", stars: 10, type: "checkbox" },
-        { text: "написать зачем тебе Herbalife и почему наставники должны тратить на это время на твой рост", stars: 10, type: "checkbox" }
+        { text: "5 консультаций по питанию", stars: 10, type: "checkbox" },
+        { text: "Эссе: зачем тебе Herbalife", stars: 10, type: "checkbox" }
       ]
     }},
     { date: "2026-06-24", title: "Задание 4 — 24 июня", tasks: {
       newbie: [
-        { text: "Скачать все приложения и изучить сайты", stars: 5, type: "checkbox" },
-        { text: "Программа очищение рассказать и продать", stars: 20, type: "checkbox" },
+        { text: "Скачать приложения + изучить сайты", stars: 5, type: "checkbox" },
+        { text: "Программа очищения + продажа", stars: 20, type: "checkbox" },
         { text: "Подписать НП с заказом", stars: 20, type: "checkbox" }
       ],
       pro: [
-        { text: "Написать 100 целей ради чего ты работаешь", stars: 10, type: "checkbox" },
-        { text: "Записать 1 сторис экспертная + 1 Сторис говорящий сторис о наборе в марафон стройности", stars: 5, type: "checkbox" },
+        { text: "100 целей ради чего работаешь", stars: 10, type: "checkbox" },
+        { text: "1 экспертная + 1 говорящая сторис", stars: 5, type: "checkbox" },
         { text: "Провести 8 сканирований", stars: 10, type: "quantity" }
       ]
     }},
     { date: "2026-06-27", title: "Задание 5 — 27 июня", tasks: {
       newbie: [
-        { text: "Провести 2 новых сканирования тела", stars: 5, type: "quantity" },
-        { text: "Сделать рассылку 15 знакомым", stars: 5, type: "checkbox" },
-        { text: "Программа Ужин рассказать и продажа", stars: 20, type: "checkbox" }
+        { text: "2 сканирования тела", stars: 5, type: "quantity" },
+        { text: "Рассылка 15 знакомым", stars: 5, type: "checkbox" },
+        { text: "Программа Ужин + продажа", stars: 20, type: "checkbox" }
       ],
       pro: [
-        { text: "Провести 8 сканирований", stars: 10, type: "quantity" },
+        { text: "8 сканирований", stars: 10, type: "quantity" },
         { text: "Родить амбассадора", stars: 30, type: "checkbox" },
-        { text: "Запуск новой команды в боте марафонов", stars: 40, type: "checkbox" }
+        { text: "Запуск команды в боте", stars: 40, type: "checkbox" }
       ]
     }},
     { date: "2026-06-30", title: "Задание 6 — 30 июня", tasks: {
       newbie: [
-        { text: "Научиться делать персонализацию (план питания)", stars: 10, type: "checkbox" },
-        { text: "Изучить МП до ВТ и рассказать своему консультанту", stars: 5, type: "checkbox" },
-        { text: "Витамины и добавки изучить и продать любое", stars: 10, type: "checkbox" },
-        { text: "посмотреть Марк хьюз и написать инсайты в чат", stars: 5, type: "checkbox" }
+        { text: "Персонализация (план питания)", stars: 10, type: "checkbox" },
+        { text: "Изучить МП до ВТ", stars: 5, type: "checkbox" },
+        { text: "Витамины + добавки + продажа", stars: 10, type: "checkbox" },
+        { text: "Марк Хьюз + инсайты", stars: 5, type: "checkbox" }
       ],
       pro: [
-        { text: "Создать склад на 200 очков", stars: 20, type: "checkbox" },
-        { text: "Изучить презентацию Завтрак от и до и справочник по продукции, рассказать родственникам нативная цель чтобы вся семья ела гербалайф фото", stars: 10, type: "checkbox" }
+        { text: "Склад на 200 очков", stars: 20, type: "checkbox" },
+        { text: "Изучить Завтрак + семье", stars: 10, type: "checkbox" }
       ]
     }},
     { date: "2026-07-03", title: "Задание 7 — 3 июля", tasks: {
       newbie: [
-        { text: "Распечатать сертификат и подарить 10 людям или знакомым", stars: 10, type: "quantity" },
-        { text: "Взять рекомендации у своих близких или знакомых 20 номеров и скинуть им сертификаты", stars: 15, type: "checkbox" },
-        { text: "скинуть в чат по питанию материалы по правильному питанию и по продуктам Гербалайф", stars: 3, type: "checkbox" }
+        { text: "Подарить сертификат 10 людям", stars: 10, type: "quantity" },
+        { text: "20 рекомендаций + сертификаты", stars: 15, type: "checkbox" },
+        { text: "Материалы по ПП в чат", stars: 3, type: "checkbox" }
       ],
       pro: [
         { text: "8 сканирований", stars: 10, type: "quantity" },
-        { text: "Разговоры о бизнесе фото отчет рассказать МП - за каждого Человека (не более 10)", stars: 5, type: "quantity" },
-        { text: "Записать рисл 3 вещи чему научил меня гербалайф, выложить в соц сети", stars: 10, type: "checkbox" }
+        { text: "Разговоры о бизнесе (за 1 чел.)", stars: 5, type: "quantity" },
+        { text: "Рилс: 3 вещи от Herbalife", stars: 10, type: "checkbox" }
       ]
     }},
     { date: "2026-07-06", title: "Задание 8 — 6 июля", tasks: {
       newbie: [
-        { text: "Посчитать сколько остались vp до следующего статуса и запланировать его со своим наставником", stars: 5, type: "checkbox" },
+        { text: "VP до след. статуса + план", stars: 5, type: "checkbox" },
         { text: "Собрать заказы на 125 очков", stars: 20, type: "checkbox" },
-        { text: "Рассказать на выйти на 35. 42 и 50 - 3 людям", stars: 15, type: "checkbox" },
+        { text: "Рассказать 3 людям про 35/42/50", stars: 15, type: "checkbox" },
         { text: "2 сканирования", stars: 10, type: "quantity" }
       ],
       pro: [
-        { text: "расписать доходы и расходы в гербалайф сначала ИБМ, финальный отчет по очкам", stars: 10, type: "checkbox" },
-        { text: "Отзыв об ИБМ видео отзыв на 1 минуту", stars: 20, type: "checkbox" },
-        { text: "Обзвонить 10 людям приглашение в клуб", stars: 10, type: "checkbox" }
+        { text: "Доходы/расходы в HL", stars: 10, type: "checkbox" },
+        { text: "Видеоотзыв об ИБМ (1 мин)", stars: 20, type: "checkbox" },
+        { text: "Обзвонить 10 человек", stars: 10, type: "checkbox" }
       ]
     }}
   ];
@@ -466,7 +471,7 @@
       });
       totalStars += taskCompletedStars;
 
-      html += `<div class="task-item" data-task-date="${schedule.date}" data-idx="${idx}">`;
+      html += `<div class="task-item">`;
       html += `<div class="task-header"><div class="task-name">📅 ${schedule.title}</div><div class="task-stars">⭐ ${taskCompletedStars}</div></div>`;
 
       tasksList.forEach((t, tIdx) => {
@@ -477,7 +482,7 @@
           html += `<div class="task-control"><input type="checkbox" data-key="${storageKey}" data-type="checkbox" ${checked ? 'checked' : ''}> <span>${t.text} (${t.stars}⭐)</span></div>`;
         } else {
           const qty = val || '';
-          html += `<div class="task-control"><span>${t.text} (${t.stars}⭐ за шт.)</span> <input type="text" inputmode="numeric" value="${qty}" data-key="${storageKey}" data-type="quantity" placeholder="0" style="width:80px;"> шт</div>`;
+          html += `<div class="task-control"><span>${t.text} (${t.stars}⭐/шт)</span> <input type="text" inputmode="numeric" value="${qty}" data-key="${storageKey}" data-type="quantity" placeholder="0"></div>`;
         }
       });
       html += `</div>`;
@@ -515,13 +520,7 @@
     const roleName = role === 'newbie' ? 'Новичок' : 'Опытный';
     
     let report = `🏆 ОТЧЁТ ПО МАРАФОНУ\n\n`;
-    report += `👤 УЧАСТНИК:\n`;
-    report += `ФИО: ${fullname}\n`;
-    report += `Статус: ${status}\n`;
-    report += `Роль: ${roleName}\n`;
-    report += `Скидка: ${discount}%\n`;
-    report += `Консультант: ${consultant}\n`;
-    report += `Вышестоящий Tab Team: ${tabTeam}\n\n`;
+    report += `👤 УЧАСТНИК:\nФИО: ${fullname}\nСтатус: ${status}\nРоль: ${roleName}\nСкидка: ${discount}%\nКонсультант: ${consultant}\nTab Team: ${tabTeam}\n\n`;
     report += `⭐ ЗАДАНИЯ:\n\n`;
     
     let totalStarsCheck = 0;
@@ -561,10 +560,7 @@
       report += `⭐ За день: ${dayStars}⭐\n\n`;
     });
     
-    report += `━━━━━━━━━━━━━━━━━━━━\n`;
-    report += `⭐ ВСЕГО ЗВЁЗД: ${totalStarsCheck}\n`;
-    report += `📅 Дата отчёта: ${new Date().toLocaleDateString()}\n`;
-    
+    report += `━━━━━━━━━━━━━━━━━━━━\n⭐ ВСЕГО ЗВЁЗД: ${totalStarsCheck}\n📅 ${new Date().toLocaleDateString()}\n`;
     return report;
   }
 
@@ -576,14 +572,8 @@
       try {
         const blob = await (await fetch(currentPhotoData)).blob();
         const file = new File([blob], "report_photo.jpg", { type: "image/jpeg" });
-        await navigator.share({
-          title: "Мой отчёт по марафону",
-          text: reportText,
-          files: [file]
-        });
-      } catch(e) { 
-        window.open(`https://wa.me/?text=${encodedText}`, '_blank');
-      }
+        await navigator.share({ title: "Мой отчёт по марафону", text: reportText, files: [file] });
+      } catch(e) { window.open(`https://wa.me/?text=${encodedText}`, '_blank'); }
     } else {
       window.open(`https://wa.me/?text=${encodedText}`, '_blank');
     }
@@ -591,18 +581,16 @@
 
   function exportExcel() {
     let csvRows = [];
-    
     csvRows.push(['ДАННЫЕ УЧАСТНИКА', '']);
     csvRows.push(['ФИО', document.getElementById('fullname').value || '']);
     csvRows.push(['Статус', document.getElementById('status').value || '']);
     csvRows.push(['Скидка (%)', document.getElementById('discount').value || '0']);
     csvRows.push(['Консультант', document.getElementById('consultant').value || '']);
     csvRows.push(['Вышестоящий Tab Team', document.getElementById('tabTeam').value || '']);
-    csvRows.push(['Роль в марафоне', role === 'newbie' ? 'Новичок' : 'Опытный']);
-    csvRows.push(['Дата выгрузки', new Date().toLocaleString()]);
+    csvRows.push(['Роль', role === 'newbie' ? 'Новичок' : 'Опытный']);
+    csvRows.push(['Дата', new Date().toLocaleString()]);
     csvRows.push([]);
-    
-    csvRows.push(['Дата', 'Задание', 'Выполнено / Кол-во', 'Звёзды']);
+    csvRows.push(['Дата', 'Задание', 'Выполнено', 'Звёзды']);
     
     let totalStarsExport = 0;
     TASKS_SCHEDULE.forEach((schedule, idx) => {
@@ -610,8 +598,7 @@
       tasksList.forEach((t, tIdx) => {
         const key = getTaskKey(idx, schedule.date, tIdx);
         let raw = progress[key];
-        let display = '';
-        let starGain = 0;
+        let display = '', starGain = 0;
         if(t.type === 'checkbox') {
           display = raw ? '✅ Да' : '❌ Нет';
           starGain = raw ? t.stars : 0;
@@ -624,45 +611,31 @@
         csvRows.push([schedule.date, t.text, display, starGain]);
       });
     });
-    
-    csvRows.push([]);
-    csvRows.push(['ИТОГО ЗВЁЗД', '', '', totalStarsExport]);
+    csvRows.push([], ['ИТОГО ЗВЁЗД', '', '', totalStarsExport]);
     
     const csvContent = csvRows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(';')).join('\n');
     const blob = new Blob(["\uFEFF" + csvContent], {type: 'text/csv;charset=utf-8;'});
     const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
     link.download = `marathon_report_${document.getElementById('fullname').value || 'участник'}_${new Date().toISOString().slice(0,10)}.csv`;
+    link.href = URL.createObjectURL(blob);
     link.click();
     URL.revokeObjectURL(link.href);
   }
 
-  document.getElementById('addPhotoBtn').addEventListener('click', () => {
-    document.getElementById('photoInput').click();
-  });
+  document.getElementById('addPhotoBtn').addEventListener('click', () => document.getElementById('photoInput').click());
   document.getElementById('photoInput').addEventListener('change', (e) => {
     if(e.target.files && e.target.files[0]) {
       const reader = new FileReader();
-      reader.onload = (ev) => {
-        currentPhotoData = ev.target.result;
-        saveAll();
-        showPhotoPreview();
-      };
+      reader.onload = (ev) => { currentPhotoData = ev.target.result; saveAll(); showPhotoPreview(); };
       reader.readAsDataURL(e.target.files[0]);
     }
   });
   function showPhotoPreview() {
     const container = document.getElementById('photoPreview');
     if(currentPhotoData) {
-      container.innerHTML = `<img src="${currentPhotoData}" class="preview-img" alt="preview"><button class="btn-outline" id="removePhotoBtn" style="padding:4px 12px;">Удалить</button>`;
-      document.getElementById('removePhotoBtn')?.addEventListener('click', () => {
-        currentPhotoData = null;
-        saveAll();
-        showPhotoPreview();
-      });
-    } else {
-      container.innerHTML = '';
-    }
+      container.innerHTML = `<img src="${currentPhotoData}" class="preview-img"><button class="btn-outline" id="removePhotoBtn">Удалить</button>`;
+      document.getElementById('removePhotoBtn')?.addEventListener('click', () => { currentPhotoData = null; saveAll(); showPhotoPreview(); });
+    } else { container.innerHTML = ''; }
   }
 
   document.querySelectorAll('.role-btn').forEach(btn => {
@@ -675,8 +648,7 @@
     });
   });
 
-  const inputsToSave = ['fullname','status','discount','consultant','tabTeam'];
-  inputsToSave.forEach(id => {
+  ['fullname','status','discount','consultant','tabTeam'].forEach(id => {
     document.getElementById(id).addEventListener('input', () => saveAll());
   });
 
