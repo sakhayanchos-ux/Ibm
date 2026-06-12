@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Бизнес-марафон — трекер заданий</title>
+  <title>Бизнес-марафон — ПРОСМОТР ВСЕХ ЗАДАНИЙ</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Марафон трекер">
@@ -27,7 +27,6 @@
       margin: 0 auto;
     }
 
-    /* заголовок */
     h1 {
       font-size: 1.9rem;
       font-weight: 800;
@@ -51,7 +50,6 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.03);
     }
 
-    /* карточки */
     .card {
       background: white;
       border-radius: 28px;
@@ -70,7 +68,6 @@
       padding-left: 12px;
     }
 
-    /* сетка 2 колонки для данных участника */
     .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -106,7 +103,6 @@
       box-shadow: 0 0 0 2px rgba(255,118,154,0.2);
     }
 
-    /* блок ролей */
     .role-switch {
       display: flex;
       gap: 12px;
@@ -134,7 +130,6 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
-    /* задания */
     .tasks-list {
       display: flex;
       flex-direction: column;
@@ -195,22 +190,6 @@
       font-size: 0.8rem;
     }
 
-    .locked-task {
-      background: #F1F3F5;
-      opacity: 0.8;
-      filter: grayscale(0.02);
-    }
-
-    .locked-task .task-name {
-      color: #8B9A8F;
-    }
-
-    .lock-icon {
-      font-size: 0.8rem;
-      margin-right: 6px;
-    }
-
-    /* итоги */
     .stats-summary {
       background: #FEF4F6;
       border-radius: 24px;
@@ -232,7 +211,6 @@
       color: #FF769A;
     }
 
-    /* фото */
     .photo-area {
       margin: 16px 0 8px;
     }
@@ -304,7 +282,7 @@
 <body>
 <div class="container">
   <h1>🌟 БИЗНЕС-МАРАФОН</h1>
-  <div style="text-align: center;"><span class="subhead">3 недели · задания со звёздами</span></div>
+  <div style="text-align: center;"><span class="subhead">3 недели · задания со звёздами · РЕЖИМ ПРОСМОТРА</span></div>
 
   <!-- Данные участника -->
   <div class="card">
@@ -326,7 +304,7 @@
 
   <!-- Список заданий по дням -->
   <div class="card" id="tasksContainer">
-    <div class="card-title">📋 ЗАДАНИЯ МАРАФОНА</div>
+    <div class="card-title">📋 ВСЕ ЗАДАНИЯ (ОТКРЫТЫ)</div>
     <div id="tasksList" class="tasks-list">Загрузка...</div>
   </div>
 
@@ -351,11 +329,11 @@
       <button class="btn-secondary" id="excelBtn">📎 Скачать Excel</button>
     </div>
   </div>
-  <footer>Данные сохраняются автоматически. Задания открываются по датам.</footer>
+  <footer>⚡ Режим просмотра: все задания доступны. Данные сохраняются автоматически.</footer>
 </div>
 
 <script>
-  // ---------- РАСПИСАНИЕ ЗАДАНИЙ (из ТЗ) ----------
+  // ---------- РАСПИСАНИЕ ЗАДАНИЙ (из ТЗ, ВСЕ ОТКРЫТЫ) ----------
   const TASKS_SCHEDULE = [
     { date: "2026-06-15", title: "Задание 1 — 15 июня", tasks: {
       newbie: [
@@ -455,18 +433,9 @@
   ];
 
   const STORAGE_KEY = "marathon_tracker_v1";
-  let role = "newbie"; // newbie / pro
-  let progress = {}; // { "taskIndex_date": { checkboxValues, quantityValues } }
+  let role = "newbie";
+  let progress = {};
   let currentPhotoData = null;
-
-  function getTodayDate() {
-    const today = new Date();
-    return today.toISOString().slice(0,10);
-  }
-
-  function isTaskAvailable(taskDateStr) {
-    return getTodayDate() >= taskDateStr;
-  }
 
   function loadData() {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -476,7 +445,6 @@
         progress = data.progress || {};
         role = data.role || "newbie";
         currentPhotoData = data.photo || null;
-        // заполнение полей формы
         document.getElementById('fullname').value = data.fullname || '';
         document.getElementById('status').value = data.status || '';
         document.getElementById('discount').value = data.discount || 0;
@@ -484,7 +452,6 @@
         document.getElementById('tabTeam').value = data.tabTeam || '';
       } catch(e) {}
     }
-    // синхронизация активной роли в UI
     document.querySelectorAll('.role-btn').forEach(btn => {
       if(btn.dataset.role === role) btn.classList.add('active');
       else btn.classList.remove('active');
@@ -511,26 +478,22 @@
     return 0;
   }
 
-  function getTaskKey(idx, date) {
-    return `task_${idx}_${date}`;
+  function getTaskKey(idx, date, tIdx) {
+    return `task_${idx}_${date}_${tIdx}`;
   }
 
   function renderTasks() {
     const container = document.getElementById('tasksList');
-    const todayStr = getTodayDate();
     let html = '';
     let totalStars = 0;
 
     TASKS_SCHEDULE.forEach((schedule, idx) => {
-      const available = isTaskAvailable(schedule.date);
-      const taskKeyBase = getTaskKey(idx, schedule.date);
       const tasksList = schedule.tasks[role] || [];
       if(!tasksList.length) return;
 
       let taskCompletedStars = 0;
-      // считаем звёзды для этого задания
       tasksList.forEach((t, tIdx) => {
-        const storageKey = `${taskKeyBase}_${tIdx}`;
+        const storageKey = getTaskKey(idx, schedule.date, tIdx);
         let userValue = false;
         let quantityVal = 0;
         if(progress[storageKey]) {
@@ -542,34 +505,25 @@
       });
       totalStars += taskCompletedStars;
 
-      const isLocked = !available;
-      let lockClass = isLocked ? 'locked-task' : '';
-      let lockBadge = isLocked ? `<span class="lock-icon">🔒</span> ` : '';
+      html += `<div class="task-item" data-task-date="${schedule.date}" data-idx="${idx}">`;
+      html += `<div class="task-header"><div class="task-name">📅 ${schedule.title}</div><div class="task-stars">⭐ ${taskCompletedStars}</div></div>`;
 
-      html += `<div class="task-item ${lockClass}" data-task-date="${schedule.date}" data-idx="${idx}">`;
-      html += `<div class="task-header"><div class="task-name">${lockBadge}${schedule.title}</div><div class="task-stars">⭐ ${taskCompletedStars}</div></div>`;
-
-      if(isLocked) {
-        html += `<div style="font-size:0.7rem; color:#8B9A8F; margin-top: 8px;">🔒 Откроется ${schedule.date}</div>`;
-      } else {
-        tasksList.forEach((t, tIdx) => {
-          const storageKey = `${taskKeyBase}_${tIdx}`;
-          let val = progress[storageKey];
-          if(t.type === 'checkbox') {
-            const checked = val === true;
-            html += `<div class="task-control"><input type="checkbox" data-key="${storageKey}" data-type="checkbox" ${checked ? 'checked' : ''}> <span>${t.text} (${t.stars}⭐)</span></div>`;
-          } else {
-            const qty = val || 0;
-            html += `<div class="task-control"><span>${t.text} (${t.stars}⭐ за шт.)</span> <input type="number" min="0" value="${qty}" data-key="${storageKey}" data-type="quantity" style="width:80px;"> шт</div>`;
-          }
-        });
-      }
+      tasksList.forEach((t, tIdx) => {
+        const storageKey = getTaskKey(idx, schedule.date, tIdx);
+        let val = progress[storageKey];
+        if(t.type === 'checkbox') {
+          const checked = val === true;
+          html += `<div class="task-control"><input type="checkbox" data-key="${storageKey}" data-type="checkbox" ${checked ? 'checked' : ''}> <span>${t.text} (${t.stars}⭐)</span></div>`;
+        } else {
+          const qty = val || 0;
+          html += `<div class="task-control"><span>${t.text} (${t.stars}⭐ за шт.)</span> <input type="number" min="0" value="${qty}" data-key="${storageKey}" data-type="quantity" style="width:80px;"> шт</div>`;
+        }
+      });
       html += `</div>`;
     });
     container.innerHTML = html;
     document.getElementById('totalStars').innerText = totalStars;
 
-    // привязать обработчики
     document.querySelectorAll('[data-key]').forEach(el => {
       if(el.type === 'checkbox') {
         el.addEventListener('change', (e) => {
@@ -589,7 +543,6 @@
     });
   }
 
-  // фото
   document.getElementById('addPhotoBtn').addEventListener('click', () => {
     document.getElementById('photoInput').click();
   });
@@ -618,7 +571,6 @@
     }
   }
 
-  // WhatsApp отправка (текст + фото через Web Share)
   async function sendWhatsApp() {
     const fullname = document.getElementById('fullname').value || 'Участник';
     const status = document.getElementById('status').value || 'НП';
@@ -637,20 +589,18 @@
         });
       } catch(e) { alert("Ошибка шеринга"); }
     } else {
-      // классический WA без фото
       const waLink = `https://wa.me/?text=${encodeURIComponent(textReport)}`;
       window.open(waLink, '_blank');
     }
   }
 
-  // Excel выгрузка
   function exportExcel() {
     let csvRows = [];
     csvRows.push(['Дата','Задание','Выполнено/Кол-во','Звёзды'].join(';'));
     TASKS_SCHEDULE.forEach((schedule, idx) => {
       const tasksList = schedule.tasks[role] || [];
       tasksList.forEach((t, tIdx) => {
-        const key = getTaskKey(idx, schedule.date) + `_${tIdx}`;
+        const key = getTaskKey(idx, schedule.date, tIdx);
         let raw = progress[key];
         let display = (t.type === 'checkbox') ? (raw ? '✅ Да' : '❌ Нет') : (raw || 0);
         let starGain = computeStarsForTask(t, t.type, t.type === 'checkbox' ? raw : raw);
@@ -666,7 +616,6 @@
     URL.revokeObjectURL(link.href);
   }
 
-  // Переключение роли
   document.querySelectorAll('.role-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       role = btn.dataset.role;
@@ -677,7 +626,6 @@
     });
   });
 
-  // автоподгрузка данных из полей
   const inputsToSave = ['fullname','status','discount','consultant','tabTeam'];
   inputsToSave.forEach(id => {
     document.getElementById(id).addEventListener('input', () => saveAll());
