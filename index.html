@@ -71,7 +71,7 @@
       letter-spacing: 0.5px;
       color: #FF769A;
     }
-    .form-field input, .form-field select {
+    .form-field input {
       padding: 10px 12px;
       border-radius: 24px;
       border: 1px solid #E2E8F0;
@@ -79,7 +79,7 @@
       font-size: 0.85rem;
       transition: 0.15s;
     }
-    .form-field input:focus, .form-field select:focus {
+    .form-field input:focus {
       outline: none;
       border-color: #FF769A;
       box-shadow: 0 0 0 2px rgba(255,118,154,0.2);
@@ -152,13 +152,14 @@
       height: 20px;
       accent-color: #4D675C;
     }
-    .task-control input[type="number"] {
-      width: 70px;
+    .task-control input[type="text"] {
+      width: 80px;
       padding: 8px 6px;
       border-radius: 30px;
       border: 1px solid #DCE3E9;
       text-align: center;
       font-size: 0.8rem;
+      background: white;
     }
     .stats-summary {
       background: #FEF4F6;
@@ -250,7 +251,7 @@
     <div class="form-grid">
       <div class="form-field"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванова Анна Петровна"></div>
       <div class="form-field"><label>Статус (НП / Супервайзер)</label><input type="text" id="status" placeholder="НП"></div>
-      <div class="form-field"><label>Скидка (%)</label><input type="number" id="discount" value="0" step="1"></div>
+      <div class="form-field"><label>Скидка (%)</label><input type="text" id="discount" inputmode="numeric" placeholder="0"></div>
       <div class="form-field"><label>Консультант</label><input type="text" id="consultant" placeholder="Имя консультанта"></div>
       <div class="form-field"><label>Вышестоящий Tab Team</label><input type="text" id="tabTeam" placeholder="Tab Team"></div>
     </div>
@@ -392,7 +393,7 @@
     }}
   ];
 
-  const STORAGE_KEY = "marathon_tracker_v1";
+  const STORAGE_KEY = "marathon_tracker_v2";
   let role = "newbie";
   let progress = {};
   let currentPhotoData = null;
@@ -407,7 +408,7 @@
         currentPhotoData = data.photo || null;
         document.getElementById('fullname').value = data.fullname || '';
         document.getElementById('status').value = data.status || '';
-        document.getElementById('discount').value = data.discount || 0;
+        document.getElementById('discount').value = data.discount || '0';
         document.getElementById('consultant').value = data.consultant || '';
         document.getElementById('tabTeam').value = data.tabTeam || '';
       } catch(e) {}
@@ -475,8 +476,8 @@
           const checked = val === true;
           html += `<div class="task-control"><input type="checkbox" data-key="${storageKey}" data-type="checkbox" ${checked ? 'checked' : ''}> <span>${t.text} (${t.stars}⭐)</span></div>`;
         } else {
-          const qty = val || 0;
-          html += `<div class="task-control"><span>${t.text} (${t.stars}⭐ за шт.)</span> <input type="number" min="0" value="${qty}" data-key="${storageKey}" data-type="quantity" style="width:80px;"> шт</div>`;
+          const qty = val || '';
+          html += `<div class="task-control"><span>${t.text} (${t.stars}⭐ за шт.)</span> <input type="text" inputmode="numeric" value="${qty}" data-key="${storageKey}" data-type="quantity" placeholder="0" style="width:80px;"> шт</div>`;
         }
       });
       html += `</div>`;
@@ -492,10 +493,12 @@
           saveAll();
           renderTasks();
         });
-      } else if(el.type === 'number') {
+      } else if(el.type === 'text' && el.dataset.type === 'quantity') {
         el.addEventListener('input', (e) => {
           const key = e.target.dataset.key;
-          progress[key] = parseInt(e.target.value) || 0;
+          let val = e.target.value.replace(/[^0-9]/g, '');
+          if(val === '') val = '';
+          progress[key] = val === '' ? 0 : parseInt(val);
           saveAll();
           renderTasks();
         });
@@ -503,7 +506,6 @@
     });
   }
 
-  // Функция для генерации подробного текстового отчёта для WhatsApp
   function generateReportText() {
     const fullname = document.getElementById('fullname').value || 'Участник';
     const status = document.getElementById('status').value || 'НП';
@@ -511,7 +513,6 @@
     const consultant = document.getElementById('consultant').value || 'не указан';
     const tabTeam = document.getElementById('tabTeam').value || 'не указан';
     const roleName = role === 'newbie' ? 'Новичок' : 'Опытный';
-    const totalStars = document.getElementById('totalStars').innerText;
     
     let report = `🏆 ОТЧЁТ ПО МАРАФОНУ\n\n`;
     report += `👤 УЧАСТНИК:\n`;
@@ -567,7 +568,6 @@
     return report;
   }
 
-  // Функция отправки WhatsApp с полным отчётом
   async function sendWhatsApp() {
     const reportText = generateReportText();
     const encodedText = encodeURIComponent(reportText);
@@ -582,11 +582,9 @@
           files: [file]
         });
       } catch(e) { 
-        // Если шеринг не удался, открываем WhatsApp с текстом
         window.open(`https://wa.me/?text=${encodedText}`, '_blank');
       }
     } else {
-      // Открываем WhatsApp с текстом (без фото)
       window.open(`https://wa.me/?text=${encodedText}`, '_blank');
     }
   }
@@ -594,10 +592,9 @@
   function exportExcel() {
     let csvRows = [];
     
-    // ШАПКА С ДАННЫМИ УЧАСТНИКА
     csvRows.push(['ДАННЫЕ УЧАСТНИКА', '']);
     csvRows.push(['ФИО', document.getElementById('fullname').value || '']);
-    csvRows.push(['Статус (НП / Супервайзер)', document.getElementById('status').value || '']);
+    csvRows.push(['Статус', document.getElementById('status').value || '']);
     csvRows.push(['Скидка (%)', document.getElementById('discount').value || '0']);
     csvRows.push(['Консультант', document.getElementById('consultant').value || '']);
     csvRows.push(['Вышестоящий Tab Team', document.getElementById('tabTeam').value || '']);
@@ -605,7 +602,6 @@
     csvRows.push(['Дата выгрузки', new Date().toLocaleString()]);
     csvRows.push([]);
     
-    // ЗАГОЛОВКИ ЗАДАНИЙ
     csvRows.push(['Дата', 'Задание', 'Выполнено / Кол-во', 'Звёзды']);
     
     let totalStarsExport = 0;
