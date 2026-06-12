@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Бизнес-марафон — трекер заданий</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Марафон трекер">
+  <meta name="theme-color" content="#FF769A">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #F5F7FA;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      padding: 20px 12px 40px;
+      color: #1E2A2E;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 0 auto;
+    }
+
+    /* заголовок */
+    h1 {
+      font-size: 1.9rem;
+      font-weight: 800;
+      text-align: center;
+      color: #4D675C;
+      letter-spacing: -0.3px;
+      margin-bottom: 4px;
+    }
+
+    .subhead {
+      text-align: center;
+      color: #6B7F74;
+      background: white;
+      display: inline-block;
+      width: auto;
+      margin: 0 auto 20px;
+      padding: 6px 18px;
+      border-radius: 60px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    /* карточки */
+    .card {
+      background: white;
+      border-radius: 28px;
+      padding: 18px 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05);
+      border: 1px solid #EDF0F2;
+    }
+
+    .card-title {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #2C3A32;
+      margin-bottom: 14px;
+      border-left: 4px solid #FF769A;
+      padding-left: 12px;
+    }
+
+    /* сетка 2 колонки для данных участника */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 16px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-field label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #FF769A;
+    }
+
+    .form-field input, .form-field select {
+      padding: 10px 12px;
+      border-radius: 24px;
+      border: 1px solid #E2E8F0;
+      background: white;
+      font-size: 0.85rem;
+      transition: 0.15s;
+    }
+
+    .form-field input:focus, .form-field select:focus {
+      outline: none;
+      border-color: #FF769A;
+      box-shadow: 0 0 0 2px rgba(255,118,154,0.2);
+    }
+
+    /* блок ролей */
+    .role-switch {
+      display: flex;
+      gap: 12px;
+      background: #F0F2F5;
+      border-radius: 60px;
+      padding: 4px;
+      margin-bottom: 20px;
+    }
+
+    .role-btn {
+      flex: 1;
+      text-align: center;
+      padding: 10px 0;
+      border-radius: 60px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.1s;
+      background: transparent;
+      color: #4D675C;
+    }
+
+    .role-btn.active {
+      background: white;
+      color: #FF769A;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    /* задания */
+    .tasks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .task-item {
+      background: #FEFEFE;
+      border-radius: 20px;
+      padding: 14px;
+      border: 1px solid #EDF0F2;
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .task-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #1E2A2E;
+    }
+
+    .task-stars {
+      background: #FFF0F3;
+      padding: 4px 10px;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #FF769A;
+    }
+
+    .task-control {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .task-control input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #4D675C;
+    }
+
+    .task-control input[type="number"] {
+      width: 70px;
+      padding: 8px 6px;
+      border-radius: 30px;
+      border: 1px solid #DCE3E9;
+      text-align: center;
+      font-size: 0.8rem;
+    }
+
+    .locked-task {
+      background: #F1F3F5;
+      opacity: 0.8;
+      filter: grayscale(0.02);
+    }
+
+    .locked-task .task-name {
+      color: #8B9A8F;
+    }
+
+    .lock-icon {
+      font-size: 0.8rem;
+      margin-right: 6px;
+    }
+
+    /* итоги */
+    .stats-summary {
+      background: #FEF4F6;
+      border-radius: 24px;
+      padding: 14px;
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: #FF769A;
+    }
+
+    /* фото */
+    .photo-area {
+      margin: 16px 0 8px;
+    }
+
+    .photo-preview {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .preview-img {
+      max-width: 80px;
+      max-height: 80px;
+      border-radius: 16px;
+      object-fit: cover;
+      border: 1px solid #DCE3E9;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #FF769A;
+      padding: 8px 14px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #FF769A;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: #FF769A;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 40px;
+      font-weight: 700;
+      color: white;
+      font-size: 0.8rem;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .btn-secondary {
+      background: #EFF3F6;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 40px;
+      font-weight: 600;
+      color: #4D675C;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .flex-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 16px 0 8px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.65rem;
+      color: #9CA7A1;
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>🌟 БИЗНЕС-МАРАФОН</h1>
+  <div style="text-align: center;"><span class="subhead">3 недели · задания со звёздами</span></div>
+
+  <!-- Данные участника -->
+  <div class="card">
+    <div class="card-title">👤 УЧАСТНИК</div>
+    <div class="form-grid">
+      <div class="form-field"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванова Анна Петровна"></div>
+      <div class="form-field"><label>Статус (НП / Супервайзер)</label><input type="text" id="status" placeholder="НП"></div>
+      <div class="form-field"><label>Скидка (%)</label><input type="number" id="discount" value="0" step="1"></div>
+      <div class="form-field"><label>Консультант</label><input type="text" id="consultant" placeholder="Имя консультанта"></div>
+      <div class="form-field"><label>Вышестоящий Tab Team</label><input type="text" id="tabTeam" placeholder="Tab Team"></div>
+    </div>
+  </div>
+
+  <!-- Роль: Новичок / Опытный -->
+  <div class="role-switch" id="roleSwitch">
+    <div class="role-btn active" data-role="newbie">🍃 НОВИЧОК</div>
+    <div class="role-btn" data-role="pro">🔥 ОПЫТНЫЙ</div>
+  </div>
+
+  <!-- Список заданий по дням -->
+  <div class="card" id="tasksContainer">
+    <div class="card-title">📋 ЗАДАНИЯ МАРАФОНА</div>
+    <div id="tasksList" class="tasks-list">Загрузка...</div>
+  </div>
+
+  <!-- Итоговая статистика -->
+  <div class="card">
+    <div class="card-title">⭐ СТАТИСТИКА</div>
+    <div class="stats-summary" id="statsBlock">
+      <div class="stat-item"><div class="stat-number" id="totalStars">0</div><div>ВСЕГО ⭐</div></div>
+    </div>
+  </div>
+
+  <!-- Фото + кнопки -->
+  <div class="card">
+    <div class="card-title">📸 ПОДТВЕРЖДЕНИЕ (ФОТО)</div>
+    <div class="photo-area">
+      <input type="file" id="photoInput" accept="image/*" style="display:none">
+      <button class="btn-outline" id="addPhotoBtn">➕ Добавить фото</button>
+      <div id="photoPreview" class="photo-preview" style="margin-top: 12px;"></div>
+    </div>
+    <div class="flex-buttons">
+      <button class="btn-primary" id="whatsappBtn">📤 Отправить консультанту (WhatsApp)</button>
+      <button class="btn-secondary" id="excelBtn">📎 Скачать Excel</button>
+    </div>
+  </div>
+  <footer>Данные сохраняются автоматически. Задания открываются по датам.</footer>
+</div>
+
+<script>
+  // ---------- РАСПИСАНИЕ ЗАДАНИЙ (из ТЗ) ----------
+  const TASKS_SCHEDULE = [
+    { date: "2026-06-15", title: "Задание 1 — 15 июня", tasks: {
+      newbie: [
+        { text: "Выложить макеты готовые", stars: 1, type: "checkbox" },
+        { text: "Сфоткать продукт свой или клубный под фото подпись (принимаю заказы …)", stars: 1, type: "checkbox" },
+        { text: "Скинуть результаты готовые или свой по желанию в соц сети (статус)", stars: 1, type: "checkbox" }
+      ],
+      pro: [
+        { text: "Изучить с наставником все возможности бизнеса Гербалайф и сухой остаток выложить кружочком в чат ИБМ", stars: 2, type: "checkbox" },
+        { text: "20 рассылок в день + 3 номера с соц опрос ежедневно", stars: 10, type: "checkbox" },
+        { text: "Позвать на вдв за каждого 1 человека", stars: 1, type: "quantity" }
+      ]
+    }},
+    { date: "2026-06-18", title: "Задание 2 — 18 июня", tasks: {
+      newbie: [
+        { text: "Рассказать коротко о кальции, продать (выложить принимаю заказы) в сторис в чат", stars: 2, type: "checkbox" },
+        { text: "Подарить подарочный сертификат 10 знакомым в личку", stars: 5, type: "checkbox" },
+        { text: "Выложить сертификат в соц сети (самым быстрым подарю)", stars: 5, type: "checkbox" }
+      ],
+      pro: [
+        { text: "Найти свою соц сети и выложить 5 сторисов в день ежедневно - за день", stars: 3, type: "checkbox" },
+        { text: "посещать все ВДВ АУ после ау записать кружочек в чат на 1 минуту отзыв и скрин", stars: 5, type: "checkbox" }
+      ]
+    }},
+    { date: "2026-06-21", title: "Задание 3 — 21 июня", tasks: {
+      newbie: [
+        { text: "Написать свою историю исходя из готового шаблона под себя", stars: 3, type: "checkbox" },
+        { text: "программа снижения рассказать и выложить, продать в чат и в соц сеть", stars: 2, type: "checkbox" },
+        { text: "Джим Рон посмотреть видео и написать инсайты в чат Cезоны жизни", stars: 2, type: "checkbox" }
+      ],
+      pro: [
+        { text: "Провести консультацию по питанию для 5 знакомым рассказать о возможностях бизнеса - фото в чат", stars: 10, type: "checkbox" },
+        { text: "написать зачем тебе Herbalife и почему наставники должны тратить на это время на твой рост", stars: 10, type: "checkbox" }
+      ]
+    }},
+    { date: "2026-06-24", title: "Задание 4 — 24 июня", tasks: {
+      newbie: [
+        { text: "Скачать все приложения и изучить сайты", stars: 5, type: "checkbox" },
+        { text: "Программа очищение рассказать и продать", stars: 20, type: "checkbox" },
+        { text: "Подписать НП с заказом", stars: 20, type: "checkbox" }
+      ],
+      pro: [
+        { text: "Написать 100 целей ради чего ты работаешь", stars: 10, type: "checkbox" },
+        { text: "Записать 1 сторис экспертная + 1 Сторис говорящий сторис о наборе в марафон стройности", stars: 5, type: "checkbox" },
+        { text: "Провести 8 сканирований", stars: 10, type: "quantity" }
+      ]
+    }},
+    { date: "2026-06-27", title: "Задание 5 — 27 июня", tasks: {
+      newbie: [
+        { text: "Провести 2 новых сканирования тела", stars: 5, type: "quantity" },
+        { text: "Сделать рассылку 15 знакомым", stars: 5, type: "checkbox" },
+        { text: "Программа Ужин рассказать и продажа", stars: 20, type: "checkbox" }
+      ],
+      pro: [
+        { text: "Провести 8 сканирований", stars: 10, type: "quantity" },
+        { text: "Родить амбассадора", stars: 30, type: "checkbox" },
+        { text: "Запуск новой команды в боте марафонов", stars: 40, type: "checkbox" }
+      ]
+    }},
+    { date: "2026-06-30", title: "Задание 6 — 30 июня", tasks: {
+      newbie: [
+        { text: "Научиться делать персонализацию (план питания)", stars: 10, type: "checkbox" },
+        { text: "Изучить МП до ВТ и рассказать своему консультанту", stars: 5, type: "checkbox" },
+        { text: "Витамины и добавки изучить и продать любое", stars: 10, type: "checkbox" },
+        { text: "посмотреть Марк хьюз и написать инсайты в чат", stars: 5, type: "checkbox" }
+      ],
+      pro: [
+        { text: "Создать склад на 200 очков", stars: 20, type: "checkbox" },
+        { text: "Изучить презентацию Завтрак от и до и справочник по продукции, рассказать родственникам нативная цель чтобы вся семья ела гербалайф фото", stars: 10, type: "checkbox" }
+      ]
+    }},
+    { date: "2026-07-03", title: "Задание 7 — 3 июля", tasks: {
+      newbie: [
+        { text: "Распечатать сертификат и подарить 10 людям или знакомым", stars: 10, type: "quantity" },
+        { text: "Взять рекомендации у своих близких или знакомых 20 номеров и скинуть им сертификаты", stars: 15, type: "checkbox" },
+        { text: "скинуть в чат по питанию материалы по правильному питанию и по продуктам Гербалайф", stars: 3, type: "checkbox" }
+      ],
+      pro: [
+        { text: "8 сканирований", stars: 10, type: "quantity" },
+        { text: "Разговоры о бизнесе фото отчет рассказать МП - за каждого Человека (не более 10)", stars: 5, type: "quantity" },
+        { text: "Записать рисл 3 вещи чему научил меня гербалайф, выложить в соц сети", stars: 10, type: "checkbox" }
+      ]
+    }},
+    { date: "2026-07-06", title: "Задание 8 — 6 июля", tasks: {
+      newbie: [
+        { text: "Посчитать сколько остались vp до следующего статуса и запланировать его со своим наставником", stars: 5, type: "checkbox" },
+        { text: "Собрать заказы на 125 очков", stars: 20, type: "checkbox" },
+        { text: "Рассказать на выйти на 35. 42 и 50 - 3 людям", stars: 15, type: "checkbox" },
+        { text: "2 сканирования", stars: 10, type: "quantity" }
+      ],
+      pro: [
+        { text: "расписать доходы и расходы в гербалайф сначала ИБМ, финальный отчет по очкам", stars: 10, type: "checkbox" },
+        { text: "Отзыв об ИБМ видео отзыв на 1 минуту", stars: 20, type: "checkbox" },
+        { text: "Обзвонить 10 людям приглашение в клуб", stars: 10, type: "checkbox" }
+      ]
+    }}
+  ];
+
+  const STORAGE_KEY = "marathon_tracker_v1";
+  let role = "newbie"; // newbie / pro
+  let progress = {}; // { "taskIndex_date": { checkboxValues, quantityValues } }
+  let currentPhotoData = null;
+
+  function getTodayDate() {
+    const today = new Date();
+    return today.toISOString().slice(0,10);
+  }
+
+  function isTaskAvailable(taskDateStr) {
+    return getTodayDate() >= taskDateStr;
+  }
+
+  function loadData() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+        progress = data.progress || {};
+        role = data.role || "newbie";
+        currentPhotoData = data.photo || null;
+        // заполнение полей формы
+        document.getElementById('fullname').value = data.fullname || '';
+        document.getElementById('status').value = data.status || '';
+        document.getElementById('discount').value = data.discount || 0;
+        document.getElementById('consultant').value = data.consultant || '';
+        document.getElementById('tabTeam').value = data.tabTeam || '';
+      } catch(e) {}
+    }
+    // синхронизация активной роли в UI
+    document.querySelectorAll('.role-btn').forEach(btn => {
+      if(btn.dataset.role === role) btn.classList.add('active');
+      else btn.classList.remove('active');
+    });
+  }
+
+  function saveAll() {
+    const store = {
+      progress: progress,
+      role: role,
+      photo: currentPhotoData,
+      fullname: document.getElementById('fullname').value,
+      status: document.getElementById('status').value,
+      discount: document.getElementById('discount').value,
+      consultant: document.getElementById('consultant').value,
+      tabTeam: document.getElementById('tabTeam').value,
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+  }
+
+  function computeStarsForTask(task, type, value) {
+    if(type === 'checkbox') return value ? task.stars : 0;
+    if(type === 'quantity') return (parseInt(value) || 0) * task.stars;
+    return 0;
+  }
+
+  function getTaskKey(idx, date) {
+    return `task_${idx}_${date}`;
+  }
+
+  function renderTasks() {
+    const container = document.getElementById('tasksList');
+    const todayStr = getTodayDate();
+    let html = '';
+    let totalStars = 0;
+
+    TASKS_SCHEDULE.forEach((schedule, idx) => {
+      const available = isTaskAvailable(schedule.date);
+      const taskKeyBase = getTaskKey(idx, schedule.date);
+      const tasksList = schedule.tasks[role] || [];
+      if(!tasksList.length) return;
+
+      let taskCompletedStars = 0;
+      // считаем звёзды для этого задания
+      tasksList.forEach((t, tIdx) => {
+        const storageKey = `${taskKeyBase}_${tIdx}`;
+        let userValue = false;
+        let quantityVal = 0;
+        if(progress[storageKey]) {
+          if(t.type === 'checkbox') userValue = progress[storageKey] === true;
+          if(t.type === 'quantity') quantityVal = progress[storageKey] || 0;
+        }
+        const starGain = computeStarsForTask(t, t.type, t.type === 'checkbox' ? userValue : quantityVal);
+        taskCompletedStars += starGain;
+      });
+      totalStars += taskCompletedStars;
+
+      const isLocked = !available;
+      let lockClass = isLocked ? 'locked-task' : '';
+      let lockBadge = isLocked ? `<span class="lock-icon">🔒</span> ` : '';
+
+      html += `<div class="task-item ${lockClass}" data-task-date="${schedule.date}" data-idx="${idx}">`;
+      html += `<div class="task-header"><div class="task-name">${lockBadge}${schedule.title}</div><div class="task-stars">⭐ ${taskCompletedStars}</div></div>`;
+
+      if(isLocked) {
+        html += `<div style="font-size:0.7rem; color:#8B9A8F; margin-top: 8px;">🔒 Откроется ${schedule.date}</div>`;
+      } else {
+        tasksList.forEach((t, tIdx) => {
+          const storageKey = `${taskKeyBase}_${tIdx}`;
+          let val = progress[storageKey];
+          if(t.type === 'checkbox') {
+            const checked = val === true;
+            html += `<div class="task-control"><input type="checkbox" data-key="${storageKey}" data-type="checkbox" ${checked ? 'checked' : ''}> <span>${t.text} (${t.stars}⭐)</span></div>`;
+          } else {
+            const qty = val || 0;
+            html += `<div class="task-control"><span>${t.text} (${t.stars}⭐ за шт.)</span> <input type="number" min="0" value="${qty}" data-key="${storageKey}" data-type="quantity" style="width:80px;"> шт</div>`;
+          }
+        });
+      }
+      html += `</div>`;
+    });
+    container.innerHTML = html;
+    document.getElementById('totalStars').innerText = totalStars;
+
+    // привязать обработчики
+    document.querySelectorAll('[data-key]').forEach(el => {
+      if(el.type === 'checkbox') {
+        el.addEventListener('change', (e) => {
+          const key = e.target.dataset.key;
+          progress[key] = e.target.checked;
+          saveAll();
+          renderTasks();
+        });
+      } else if(el.type === 'number') {
+        el.addEventListener('input', (e) => {
+          const key = e.target.dataset.key;
+          progress[key] = parseInt(e.target.value) || 0;
+          saveAll();
+          renderTasks();
+        });
+      }
+    });
+  }
+
+  // фото
+  document.getElementById('addPhotoBtn').addEventListener('click', () => {
+    document.getElementById('photoInput').click();
+  });
+  document.getElementById('photoInput').addEventListener('change', (e) => {
+    if(e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        currentPhotoData = ev.target.result;
+        saveAll();
+        showPhotoPreview();
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  });
+  function showPhotoPreview() {
+    const container = document.getElementById('photoPreview');
+    if(currentPhotoData) {
+      container.innerHTML = `<img src="${currentPhotoData}" class="preview-img" alt="preview"><button class="btn-outline" id="removePhotoBtn" style="padding:4px 12px;">Удалить</button>`;
+      document.getElementById('removePhotoBtn')?.addEventListener('click', () => {
+        currentPhotoData = null;
+        saveAll();
+        showPhotoPreview();
+      });
+    } else {
+      container.innerHTML = '';
+    }
+  }
+
+  // WhatsApp отправка (текст + фото через Web Share)
+  async function sendWhatsApp() {
+    const fullname = document.getElementById('fullname').value || 'Участник';
+    const status = document.getElementById('status').value || 'НП';
+    const consultant = document.getElementById('consultant').value || 'консультант';
+    const totalStars = document.getElementById('totalStars').innerText;
+    const textReport = `🏆 ОТЧЁТ ПО МАРАФОНУ\nУчастник: ${fullname}\nСтатус: ${status}\nКонсультант: ${consultant}\n⭐ Всего звёзд: ${totalStars}\nДата отчёта: ${new Date().toLocaleDateString()}`;
+    
+    if(currentPhotoData && navigator.share) {
+      try {
+        const blob = await (await fetch(currentPhotoData)).blob();
+        const file = new File([blob], "report_photo.jpg", { type: "image/jpeg" });
+        await navigator.share({
+          title: "Мой отчёт",
+          text: textReport,
+          files: [file]
+        });
+      } catch(e) { alert("Ошибка шеринга"); }
+    } else {
+      // классический WA без фото
+      const waLink = `https://wa.me/?text=${encodeURIComponent(textReport)}`;
+      window.open(waLink, '_blank');
+    }
+  }
+
+  // Excel выгрузка
+  function exportExcel() {
+    let csvRows = [];
+    csvRows.push(['Дата','Задание','Выполнено/Кол-во','Звёзды'].join(';'));
+    TASKS_SCHEDULE.forEach((schedule, idx) => {
+      const tasksList = schedule.tasks[role] || [];
+      tasksList.forEach((t, tIdx) => {
+        const key = getTaskKey(idx, schedule.date) + `_${tIdx}`;
+        let raw = progress[key];
+        let display = (t.type === 'checkbox') ? (raw ? '✅ Да' : '❌ Нет') : (raw || 0);
+        let starGain = computeStarsForTask(t, t.type, t.type === 'checkbox' ? raw : raw);
+        csvRows.push([schedule.date, t.text, display, starGain].join(';'));
+      });
+    });
+    csvRows.push([],['ИТОГО ЗВЁЗД', document.getElementById('totalStars').innerText].join(';'));
+    const blob = new Blob(["\uFEFF" + csvRows.join('\n')], {type: 'text/csv;charset=utf-8;'});
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `marathon_report_${new Date().toISOString().slice(0,10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
+
+  // Переключение роли
+  document.querySelectorAll('.role-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      role = btn.dataset.role;
+      saveAll();
+      renderTasks();
+      document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // автоподгрузка данных из полей
+  const inputsToSave = ['fullname','status','discount','consultant','tabTeam'];
+  inputsToSave.forEach(id => {
+    document.getElementById(id).addEventListener('input', () => saveAll());
+  });
+
+  document.getElementById('whatsappBtn').addEventListener('click', sendWhatsApp);
+  document.getElementById('excelBtn').addEventListener('click', exportExcel);
+
+  loadData();
+  renderTasks();
+  showPhotoPreview();
+</script>
+</body>
+</html>
