@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Бизнес-марафон | Новички / Опытные</title>
+  <title>Бизнес-марафон — трекер заданий</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Марафон">
+  <meta name="theme-color" content="#FF769A">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -12,12 +16,13 @@
       padding: 20px 12px 40px;
       color: #1E2A2E;
     }
-    .container { max-width: 900px; margin: 0 auto; }
+    .container { max-width: 800px; margin: 0 auto; }
     h1 {
       font-size: 1.9rem;
       font-weight: 800;
       text-align: center;
       color: #4D675C;
+      letter-spacing: -0.3px;
       margin-bottom: 4px;
     }
     .subhead {
@@ -31,25 +36,55 @@
       border-radius: 60px;
       font-size: 0.8rem;
       font-weight: 500;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
     }
     .card {
       background: white;
       border-radius: 28px;
       padding: 18px 16px;
       margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05);
       border: 1px solid #EDF0F2;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
     }
     .card-title {
       font-weight: 700;
       font-size: 1.2rem;
-      color: #FF769A;
+      color: #2C3A32;
       margin-bottom: 14px;
       border-left: 4px solid #FF769A;
       padding-left: 12px;
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
+      align-items: center;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 16px;
+    }
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-field label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #FF769A;
+    }
+    .form-field input {
+      padding: 10px 12px;
+      border-radius: 24px;
+      border: 1px solid #E2E8F0;
+      background: white;
+      font-size: 0.85rem;
+    }
+    .form-field input:focus {
+      outline: none;
+      border-color: #FF769A;
+      box-shadow: 0 0 0 2px rgba(255,118,154,0.2);
     }
     .role-switch {
       display: flex;
@@ -80,24 +115,15 @@
       color: #9CA7A1;
       display: block;
     }
-    .day-section {
-      margin-bottom: 28px;
-    }
-    .day-header {
-      font-weight: 700;
-      font-size: 1rem;
-      color: #4D675C;
-      background: #F0F2F5;
-      padding: 8px 12px;
-      border-radius: 30px;
-      margin-bottom: 12px;
-      display: inline-block;
+    .tasks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
     .task-item {
       background: #FEFEFE;
       border-radius: 20px;
-      padding: 12px;
-      margin-bottom: 12px;
+      padding: 14px;
       border: 1px solid #EDF0F2;
     }
     .task-header {
@@ -106,12 +132,12 @@
       align-items: baseline;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
-    .task-text {
-      font-weight: 600;
-      font-size: 0.85rem;
-      flex: 1;
+    .task-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #FF769A;
     }
     .task-stars {
       background: #FFF0F3;
@@ -125,6 +151,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      flex-wrap: wrap;
       margin-top: 8px;
     }
     .task-control input[type="checkbox"] {
@@ -132,18 +159,38 @@
       height: 20px;
       accent-color: #4D675C;
     }
-    .task-control input[type="number"] {
+    .task-control input[type="text"] {
       width: 70px;
-      padding: 6px;
+      padding: 8px 6px;
       border-radius: 30px;
       border: 1px solid #DCE3E9;
       text-align: center;
+      font-size: 0.8rem;
+      background: white;
+    }
+    .stats-summary {
+      background: #FEF4F6;
+      border-radius: 24px;
+      padding: 14px;
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: #FF769A;
     }
     .weekly-block {
       background: #FFF9FA;
-      border-radius: 24px;
+      border-radius: 20px;
       padding: 12px;
-      margin-top: 20px;
+      margin-top: 16px;
       border: 1px solid #FFE0E8;
     }
     .weekly-title {
@@ -155,7 +202,6 @@
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
-      margin-top: 8px;
     }
     .day-check {
       display: flex;
@@ -166,32 +212,26 @@
       border-radius: 40px;
       font-size: 0.75rem;
     }
-    .total-stars-block {
-      background: linear-gradient(135deg, #FF769A, #FF98B5);
-      color: white;
-      padding: 16px;
-      border-radius: 60px;
-      text-align: center;
-      margin: 20px 0;
-    }
-    .total-stars-number {
-      font-size: 2.5rem;
-      font-weight: 800;
-    }
-    .btn {
+    .btn-primary {
       background: #FF769A;
       border: none;
-      padding: 10px 20px;
+      padding: 10px 16px;
       border-radius: 40px;
-      font-weight: 600;
+      font-weight: 700;
       color: white;
       font-size: 0.8rem;
       cursor: pointer;
+      text-align: center;
     }
-    .btn-outline {
-      background: transparent;
-      border: 1px solid #FF769A;
-      color: #FF769A;
+    .btn-secondary {
+      background: #EFF3F6;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 40px;
+      font-weight: 600;
+      color: #4D675C;
+      font-size: 0.8rem;
+      cursor: pointer;
     }
     .flex-buttons {
       display: flex;
@@ -209,24 +249,17 @@
       font-size: 0.7rem;
       color: #7BC850;
     }
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px 16px;
+    .total-stars-block {
+      background: linear-gradient(135deg, #FF769A, #FF98B5);
+      color: white;
+      padding: 16px;
+      border-radius: 60px;
+      text-align: center;
+      margin: 20px 0;
     }
-    .form-field input {
-      width: 100%;
-      padding: 8px 12px;
-      border-radius: 24px;
-      border: 1px solid #E2E8F0;
-      font-size: 0.85rem;
-    }
-    .form-field label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: #FF769A;
-      display: block;
-      margin-bottom: 4px;
+    .total-stars-number {
+      font-size: 2.5rem;
+      font-weight: 800;
     }
   </style>
 </head>
@@ -249,7 +282,6 @@
     </div>
   </div>
 
-  <!-- Выбор роли -->
   <div class="role-switch" id="roleSwitch">
     <div class="role-btn active" data-role="newbie">
       🍃 НОВИЧОК
@@ -261,137 +293,133 @@
     </div>
   </div>
 
-  <!-- Задания -->
   <div class="card">
     <div class="card-title">📋 ЗАДАНИЯ МАРАФОНА</div>
-    <div id="tasksContainer"></div>
+    <div id="tasksList" class="tasks-list">Загрузка...</div>
   </div>
 
-  <!-- Общий итог звёзд -->
   <div class="total-stars-block">
     <div>⭐ ВСЕГО ЗВЁЗД ЗА МАРАФОН</div>
     <div class="total-stars-number" id="totalStars">0</div>
   </div>
 
   <div class="flex-buttons">
-    <button class="btn" id="whatsappBtn">📤 Отправить консультанту (WhatsApp)</button>
-    <button class="btn btn-outline" id="excelBtn">📎 Скачать Excel</button>
+    <button class="btn-primary" id="whatsappBtn">📤 Отправить консультанту (WhatsApp)</button>
+    <button class="btn-secondary" id="excelBtn">📎 Скачать Excel</button>
   </div>
-  <footer>⚡ Данные сохраняются автоматически. Отмечай выполненные задания.</footer>
+  <footer>⚡ Данные сохраняются автоматически. Все задания открыты для просмотра.</footer>
 </div>
 
 <script>
-  // ===================== ЗАДАНИЯ ДЛЯ НОВИЧКОВ (оставляем как было) =====================
-  const newbieTasks = {
-    // 1 неделя (даты: 15.06, 17.06, 19.06)
-    week1_mon: [
+  // ===================== ЗАДАНИЯ ДЛЯ НОВИЧКОВ (без изменений) =====================
+  const NEWBIE_TASKS = [
+    { week: 1, day: "mon", date: "15.06", title: "Задание 1 — 15 июня", tasks: [
       { text: "Выложить макеты", stars: 1, type: "checkbox" },
       { text: "Сфоткать продукт с подписью", stars: 1, type: "checkbox" },
       { text: "Скинуть результаты в соцсети", stars: 1, type: "checkbox" }
-    ],
-    week1_wed: [
+    ]},
+    { week: 1, day: "wed", date: "17.06", title: "Задание 2 — 17 июня", tasks: [
       { text: "Рассказать о кальции + продажа", stars: 2, type: "checkbox" },
       { text: "Подарить сертификат 10 знакомым", stars: 5, type: "checkbox" },
       { text: "Выложить сертификат в соцсети", stars: 5, type: "checkbox" }
-    ],
-    week1_fri: [
+    ]},
+    { week: 1, day: "fri", date: "19.06", title: "Задание 3 — 19 июня", tasks: [
       { text: "Написать историю по шаблону", stars: 3, type: "checkbox" },
       { text: "Рассказать о программе снижения", stars: 2, type: "checkbox" },
       { text: "Джим Рон + инсайты в чат", stars: 2, type: "checkbox" }
-    ],
-    week2_mon: [
+    ]},
+    { week: 2, day: "mon", date: "22.06", title: "Задание 4 — 22 июня", tasks: [
       { text: "Скачать приложения + изучить сайты", stars: 5, type: "checkbox" },
       { text: "Программа очищения + продажа", stars: 20, type: "checkbox" },
       { text: "Подписать НП с заказом", stars: 20, type: "checkbox" }
-    ],
-    week2_wed: [
-      { text: "100 целей ради чего работаешь", stars: 10, type: "checkbox" },
-      { text: "1 экспертная + 1 говорящая сторис", stars: 5, type: "checkbox" },
+    ]},
+    { week: 2, day: "wed", date: "24.06", title: "Задание 5 — 24 июня", tasks: [
+      { text: "Написать 100 целей ради чего работаешь", stars: 10, type: "checkbox" },
+      { text: "Записать 1 экспертную + 1 говорящую сторис", stars: 5, type: "checkbox" },
       { text: "Провести 8 сканирований", stars: 10, type: "quantity" }
-    ],
-    week2_fri: [
-      { text: "2 сканирования тела", stars: 5, type: "quantity" },
-      { text: "Рассылка 15 знакомым", stars: 5, type: "checkbox" },
+    ]},
+    { week: 2, day: "fri", date: "26.06", title: "Задание 6 — 26 июня", tasks: [
+      { text: "Провести 2 сканирования тела", stars: 5, type: "quantity" },
+      { text: "Сделать рассылку 15 знакомым", stars: 5, type: "checkbox" },
       { text: "Программа Ужин + продажа", stars: 20, type: "checkbox" }
-    ],
-    week3_mon: [
-      { text: "Персонализация (план питания)", stars: 10, type: "checkbox" },
+    ]},
+    { week: 3, day: "mon", date: "29.06", title: "Задание 7 — 29 июня", tasks: [
+      { text: "Научиться делать персонализацию (план питания)", stars: 10, type: "checkbox" },
       { text: "Изучить МП до ВТ", stars: 5, type: "checkbox" },
       { text: "Витамины + добавки + продажа", stars: 10, type: "checkbox" },
       { text: "Марк Хьюз + инсайты", stars: 5, type: "checkbox" }
-    ],
-    week3_wed: [
-      { text: "Склад на 200 очков", stars: 20, type: "checkbox" },
+    ]},
+    { week: 3, day: "wed", date: "01.07", title: "Задание 8 — 1 июля", tasks: [
+      { text: "Создать склад на 200 очков", stars: 20, type: "checkbox" },
       { text: "Изучить Завтрак + семье", stars: 10, type: "checkbox" }
-    ],
-    week3_fri: [
+    ]},
+    { week: 3, day: "fri", date: "03.07", title: "Задание 9 — 3 июля", tasks: [
       { text: "Подарить сертификат 10 людям", stars: 10, type: "quantity" },
-      { text: "20 рекомендаций + сертификаты", stars: 15, type: "checkbox" },
+      { text: "Взять рекомендации + сертификаты", stars: 15, type: "checkbox" },
       { text: "Материалы по ПП в чат", stars: 3, type: "checkbox" }
-    ]
-  };
+    ]}
+  ];
 
-  // ===================== ЗАДАНИЯ ДЛЯ ОПЫТНЫХ (ИЗ САЙТА) =====================
-  const proTasks = {
-    week1_mon: [
+  // ===================== ЗАДАНИЯ ДЛЯ ОПЫТНЫХ (из сайта) =====================
+  const PRO_TASKS = [
+    { week: 1, day: "mon", date: "15.06", title: "Неделя 1 — Понедельник", tasks: [
       { text: "Изучить с наставником все возможности бизнеса", stars: 10, type: "checkbox" },
       { text: "Провести 5 консультаций по продукту", stars: 50, type: "quantity", unit: "консультация" },
       { text: "Найти свою основную соцсеть + 5 сторис в день", stars: 10, type: "checkbox" },
       { text: "Написать историю по продукту и бизнесу (текст+видео+коллаж)", stars: 30, type: "checkbox" },
       { text: "Написать 100 целей", stars: 15, type: "checkbox" },
       { text: "Разобрать тему финансового планирования 50/30/20%", stars: 10, type: "checkbox" }
-    ],
-    week1_wed: [
+    ]},
+    { week: 1, day: "wed", date: "17.06", title: "Неделя 1 — Среда", tasks: [
       { text: "Сделать 20 рассылок в день + 1 номер соцопроса (ежедневно)", stars: 30, type: "checkbox" },
       { text: "Подписаться на всех лидеров Herbalife", stars: 10, type: "checkbox" },
       { text: "Записать и выложить видео про ОЯН, коктейль, КПВ (3 видео)", stars: 30, type: "quantity", unit: "видео" },
       { text: "Прочитать и законспектировать книгу «Умершие доктора не лгут»", stars: 20, type: "checkbox" },
       { text: "Провести консультацию по питанию для 5 родственников + фото", stars: 25, type: "quantity", unit: "родственник" },
       { text: "Вести учёт доходов и расходов ежедневно", stars: 10, type: "checkbox" }
-    ],
-    week1_fri: [
+    ]},
+    { week: 1, day: "fri", date: "19.06", title: "Неделя 1 — Пятница", tasks: [
       { text: "Провести 5 разговоров о бизнесе", stars: 20, type: "quantity", unit: "разговор" },
       { text: "Посещать все школы (ВДВ, АУ, ШП) + скрин + кружочек 1 мин", stars: 10, type: "checkbox" },
       { text: "Прочитать весь справочник по продукту", stars: 15, type: "checkbox" },
-      { text: "Написать эссе «Зачем тебе Herbalife и почему наставники должны тратить время на твой рост»", stars: 20, type: "checkbox" },
+      { text: "Написать эссе «Зачем тебе Herbalife»", stars: 20, type: "checkbox" },
       { text: "Создать склад минимум на 200 VP", stars: 30, type: "checkbox" },
       { text: "Сделать 250 очков + отчёт с оборотом", stars: 40, type: "checkbox" }
-    ],
-    week2_mon: [
+    ]},
+    { week: 2, day: "mon", date: "22.06", title: "Неделя 2 — Понедельник", tasks: [
       { text: "Провести 25 диагностик", stars: 50, type: "quantity", unit: "диагностика" },
       { text: "Провести 10 разговоров о бизнесе", stars: 40, type: "quantity", unit: "разговор" },
       { text: "Ежедневный анонс дня амбассадоров", stars: 15, type: "checkbox" }
-    ],
-    week2_wed: [
+    ]},
+    { week: 2, day: "wed", date: "24.06", title: "Неделя 2 — Среда", tasks: [
       { text: "Родить амбассадора", stars: 50, type: "checkbox" },
       { text: "Запуск новой команды марафона", stars: 60, type: "checkbox" },
       { text: "Ежедневно: 1 экспертная сторис + 1 сторис набора команды", stars: 20, type: "checkbox" }
-    ],
-    week2_fri: [
+    ]},
+    { week: 2, day: "fri", date: "26.06", title: "Неделя 2 — Пятница", tasks: [
       { text: "Прочитать документ «Как сохранить результат»", stars: 15, type: "checkbox" },
       { text: "Изучить презентацию «Завтрак» + презентовать родственникам", stars: 25, type: "checkbox" },
       { text: "Сделать 300 очков + отчёт с оборотом", stars: 50, type: "checkbox" }
-    ],
-    week3_mon: [
+    ]},
+    { week: 3, day: "mon", date: "29.06", title: "Неделя 3 — Понедельник", tasks: [
       { text: "Посетить встречу ИБМ — тема Философия + скрин + кружочек", stars: 20, type: "checkbox" },
       { text: "Игра «Обменяй зубочистку» — участвовать и применить навык переговоров", stars: 25, type: "checkbox" }
-    ],
-    week3_wed: [
+    ]},
+    { week: 3, day: "wed", date: "01.07", title: "Неделя 3 — Среда", tasks: [
       { text: "Провести максимальное количество консультаций (каждая — звёзды)", stars: 30, type: "quantity", unit: "консультация" },
       { text: "Провести разговоры о бизнесе (каждый — звёзды)", stars: 20, type: "quantity", unit: "разговор" }
-    ],
-    week3_fri: [
+    ]},
+    { week: 3, day: "fri", date: "03.07", title: "Неделя 3 — Пятница", tasks: [
       { text: "Ежедневные сторис: 1 экспертная + 1 по набору команды", stars: 15, type: "checkbox" },
       { text: "Записать итоговый рилс «3 вещи, которым меня научил Herbalife»", stars: 30, type: "checkbox" },
       { text: "Финальный отчёт с оборотом, очками и звёздами", stars: 40, type: "checkbox" }
-    ]
-  };
+    ]}
+  ];
 
   const appearanceDays = ["ПН","ВТ","СР","ЧТ","ПТ","СБ","ВС"];
-  const STORAGE_KEY = "marathon_full_v3";
+  const STORAGE_KEY = "marathon_full_v4";
   let role = "newbie";
   let progress = {};
-  let currentTasks = null;
 
   function loadData() {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -411,11 +439,6 @@
       if(btn.dataset.role === role) btn.classList.add('active');
       else btn.classList.remove('active');
     });
-    setTasksByRole();
-  }
-
-  function setTasksByRole() {
-    currentTasks = (role === "newbie") ? newbieTasks : proTasks;
     renderTasks();
   }
 
@@ -436,84 +459,88 @@
     }
   }
 
+  function getTasksByRole() {
+    return role === "newbie" ? NEWBIE_TASKS : PRO_TASKS;
+  }
+
   function renderTasks() {
-    const weeks = [
-      { name: "week1", dates: ["15.06", "17.06", "19.06"], days: ["mon","wed","fri"] },
-      { name: "week2", dates: ["22.06", "24.06", "26.06"], days: ["mon","wed","fri"] },
-      { name: "week3", dates: ["29.06", "01.07", "03.07"], days: ["mon","wed","fri"] }
-    ];
+    const tasksList = getTasksByRole();
     let html = '';
     let totalStars = 0;
 
-    for(let wi = 0; wi < weeks.length; wi++) {
-      const week = weeks[wi];
-      html += `<div style="margin-bottom: 32px;"><div class="day-header">📅 Неделя ${wi+1}</div>`;
+    // Группируем по неделям
+    const weeks = [1, 2, 3];
+    for (let w of weeks) {
+      const weekTasks = tasksList.filter(t => t.week === w);
+      if (weekTasks.length === 0) continue;
       
-      for(let di = 0; di < week.days.length; di++) {
-        const dayKey = `${week.name}_${week.days[di]}`;
-        const tasks = currentTasks[dayKey] || [];
-        if(tasks.length === 0) continue;
+      html += `<div style="margin-bottom: 28px;"><div class="task-name">📅 НЕДЕЛЯ ${w}</div>`;
+      
+      // ПН, СР, ПТ
+      const dayOrder = ["mon", "wed", "fri"];
+      for (let day of dayOrder) {
+        const dayTask = weekTasks.find(t => t.day === day);
+        if (!dayTask) continue;
         
-        const dayName = week.days[di] === 'mon' ? 'Понедельник' : (week.days[di] === 'wed' ? 'Среда' : 'Пятница');
-        html += `<div style="margin: 16px 0 8px 0;"><strong>📌 ${dayName} (${week.dates[di]})</strong></div>`;
+        html += `<div class="task-item">`;
+        html += `<div class="task-header"><div class="task-name">📌 ${dayTask.title} (${dayTask.date})</div></div>`;
         
-        for(let t of tasks) {
-          const taskId = `${role}_${dayKey}_${t.text}`;
+        for (let t of dayTask.tasks) {
+          const taskId = `${role}_w${w}_${day}_${t.text}`;
           let starVal = 0;
-          if(t.type === 'checkbox') starVal = progress[taskId] ? t.stars : 0;
+          if (t.type === 'checkbox') starVal = progress[taskId] ? t.stars : 0;
           else starVal = (parseInt(progress[taskId]) || 0) * t.stars;
           totalStars += starVal;
           
-          html += `<div class="task-item">
-            <div class="task-header">
-              <span class="task-text">${t.text}</span>
-              <span class="task-stars">${t.stars}⭐</span>
-            </div>
-            <div class="task-control">`;
-          if(t.type === 'checkbox') {
+          html += `<div class="task-control" style="margin-top: 8px;">`;
+          if (t.type === 'checkbox') {
             const checked = progress[taskId] === true;
-            html += `<input type="checkbox" data-id="${taskId}" data-type="checkbox" ${checked ? 'checked' : ''}> <span>✅ Да / Нет</span>`;
+            html += `<input type="checkbox" data-id="${taskId}" data-type="checkbox" ${checked ? 'checked' : ''}> <span>${t.text} (${t.stars}⭐)</span>`;
           } else {
             const val = progress[taskId] || 0;
-            html += `<span>Количество ${t.unit || 'шт'}:</span> <input type="number" value="${val}" data-id="${taskId}" data-type="quantity" min="0" style="width:80px;"> шт`;
+            html += `<span>${t.text} (${t.stars}⭐ за ${t.unit || 'шт'}):</span> <input type="text" inputmode="numeric" value="${val}" data-id="${taskId}" data-type="quantity" placeholder="0" style="width:70px;"> ${t.unit || 'шт'}`;
           }
-          html += `</div></div>`;
+          html += `</div>`;
         }
+        html += `</div>`;
       }
       html += `</div>`;
     }
-    
-    // Внешний вид
-    html += `<div class="weekly-block"><div class="weekly-title">👗 ВНЕШНИЙ ВИД (каждый день, 5⭐/день)</div><div class="days-row">`;
-    for(let day of appearanceDays) {
-      const key = `${role}_appearance_${day}`;
-      const checked = progress[key] === true;
-      if(checked) totalStars += 5;
-      html += `<label class="day-check"><input type="checkbox" data-id="${key}" data-type="checkbox" ${checked ? 'checked' : ''}> ${day} (5⭐)</label>`;
+
+    // ========== ДОПОЛНИТЕЛЬНЫЕ БЛОКИ ТОЛЬКО ДЛЯ ОПЫТНЫХ ==========
+    if (role === "pro") {
+      // Внешний вид (7 дней)
+      html += `<div class="weekly-block"><div class="weekly-title">👗 ВНЕШНИЙ ВИД (каждый день, 5⭐/день)</div><div class="days-row">`;
+      for (let day of appearanceDays) {
+        const key = `pro_appearance_${day}`;
+        const checked = progress[key] === true;
+        if (checked) totalStars += 5;
+        html += `<label class="day-check"><input type="checkbox" data-id="${key}" data-type="checkbox" ${checked ? 'checked' : ''}> ${day} (5⭐)</label>`;
+      }
+      html += `</div></div>`;
+
+      // Джим Рон «Сезоны жизни» (3 недели)
+      for (let w = 1; w <= 3; w++) {
+        const key = `pro_jimron_week${w}`;
+        const checked = progress[key] === true;
+        if (checked) totalStars += 15;
+        html += `<div class="weekly-block"><div class="weekly-title">📖 Джим Рон «Сезоны жизни» — Неделя ${w}</div>
+          <div class="task-control"><input type="checkbox" data-id="${key}" data-type="checkbox" ${checked ? 'checked' : ''}> <span>Прочитал(а) часть + кружочек с мыслями (15⭐)</span></div>
+        </div>`;
+      }
+
+      // Расширение финансовых границ (3 недели)
+      for (let w = 1; w <= 3; w++) {
+        const key = `pro_finance_week${w}`;
+        const checked = progress[key] === true;
+        if (checked) totalStars += 20;
+        html += `<div class="weekly-block"><div class="weekly-title">💎 Расширение финансовых границ — Неделя ${w}</div>
+          <div class="task-control"><input type="checkbox" data-id="${key}" data-type="checkbox" ${checked ? 'checked' : ''}> <span>Выполнил(а) задания недели (20⭐)</span></div>
+        </div>`;
+      }
     }
-    html += `</div></div>`;
-    
-    // Джим Рон
-    for(let w = 1; w <= 3; w++) {
-      const key = `${role}_jimron_week${w}`;
-      const checked = progress[key] === true;
-      if(checked) totalStars += 15;
-      html += `<div class="weekly-block"><div class="weekly-title">📖 Джим Рон «Сезоны жизни» — Неделя ${w}</div>
-        <div class="task-control"><input type="checkbox" data-id="${key}" data-type="checkbox" ${checked ? 'checked' : ''}> <span>Прочитал(а) часть + кружочек с мыслями (15⭐)</span></div>
-      </div>`;
-    }
-    
-    // Расширение границ
-    for(let w = 1; w <= 3; w++) {
-      const key = `${role}_finance_week${w}`;
-      const checked = progress[key] === true;
-      if(checked) totalStars += 20;
-      html += `<div class="weekly-block"><div class="weekly-title">💎 Расширение финансовых границ — Неделя ${w}</div>
-        <div class="task-control"><input type="checkbox" data-id="${key}" data-type="checkbox" ${checked ? 'checked' : ''}> <span>Выполнил(а) задания недели (20⭐)</span></div>
-      </div>`;
-    }
-    
-    document.getElementById('tasksContainer').innerHTML = html;
+
+    document.getElementById('tasksList').innerHTML = html;
     document.getElementById('totalStars').innerText = totalStars;
     attachEvents();
   }
@@ -522,31 +549,45 @@
     document.querySelectorAll('[data-id]').forEach(el => {
       const id = el.dataset.id;
       const type = el.dataset.type;
-      if(type === 'checkbox') {
-        el.addEventListener('change', (e) => {
-          progress[id] = e.target.checked;
-          saveAll();
-          renderTasks();
-        });
-      } else if(type === 'quantity') {
-        el.addEventListener('input', (e) => {
-          let val = parseInt(e.target.value);
-          if(isNaN(val)) val = 0;
-          progress[id] = val;
-          saveAll();
-          renderTasks();
-        });
+      if (type === 'checkbox') {
+        el.removeEventListener('change', handleCheckbox);
+        el.addEventListener('change', handleCheckbox);
+      } else if (type === 'quantity') {
+        el.removeEventListener('input', handleQuantity);
+        el.addEventListener('input', handleQuantity);
       }
     });
   }
 
+  function handleCheckbox(e) {
+    const id = e.target.dataset.id;
+    progress[id] = e.target.checked;
+    saveAll();
+    renderTasks();
+  }
+
+  function handleQuantity(e) {
+    const id = e.target.dataset.id;
+    let val = e.target.value.replace(/[^0-9]/g, '');
+    progress[id] = val === '' ? 0 : parseInt(val);
+    saveAll();
+    renderTasks();
+  }
+
   async function sendWhatsApp() {
-    const name = document.getElementById('fullname').value || 'Участник';
-    const stat = document.getElementById('status').value || '';
-    const total = document.getElementById('totalStars').innerText;
+    const fullname = document.getElementById('fullname').value || 'Участник';
+    const status = document.getElementById('status').value || '';
+    const totalStars = document.getElementById('totalStars').innerText;
     const roleName = role === 'newbie' ? 'Новичок (НП/новые супервайзеры)' : 'Опытный (старые супервайзеры/WT)';
-    const text = `🏆 ОТЧЁТ ПО МАРАФОНУ\nУчастник: ${name}\nСтатус: ${stat}\nРоль: ${roleName}\n⭐ Всего звёзд: ${total}\nДата: ${new Date().toLocaleDateString()}`;
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    const text = `🏆 ОТЧЁТ ПО МАРАФОНУ\n\n👤 УЧАСТНИК:\nФИО: ${fullname}\nСтатус: ${status}\nРоль: ${roleName}\n\n⭐ Всего звёзд: ${totalStars}\n📅 ${new Date().toLocaleDateString()}`;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "Мой отчёт", text: text });
+      } catch(e) { window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank'); }
+    } else {
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    }
   }
 
   function exportExcel() {
@@ -561,36 +602,35 @@
     rows.push(['Задание','Выполнено / Кол-во','Звёзды']);
     
     let total = 0;
-    // здесь можно собрать все задания аналогично renderTasks, но для краткости оставим как пример
-    const weeks = ["week1","week2","week3"];
-    const days = ["mon","wed","fri"];
-    for(let w of weeks) {
-      for(let d of days) {
-        const tasks = currentTasks[`${w}_${d}`] || [];
-        for(let t of tasks) {
-          const id = `${role}_${w}_${d}_${t.text}`;
-          let val = progress[id];
-          let display = '', stars = 0;
-          if(t.type === 'checkbox') {
-            display = val ? '✅ Да' : '❌ Нет';
-            stars = val ? t.stars : 0;
-          } else {
-            let qty = val || 0;
-            display = `${qty} шт`;
-            stars = qty * t.stars;
-          }
-          total += stars;
-          rows.push([t.text, display, stars]);
+    const tasksList = getTasksByRole();
+    for (let taskGroup of tasksList) {
+      for (let t of taskGroup.tasks) {
+        const id = `${role}_w${taskGroup.week}_${taskGroup.day}_${t.text}`;
+        let val = progress[id];
+        let display = '', stars = 0;
+        if (t.type === 'checkbox') {
+          display = val ? '✅ Да' : '❌ Нет';
+          stars = val ? t.stars : 0;
+        } else {
+          let qty = val || 0;
+          display = `${qty} шт`;
+          stars = qty * t.stars;
         }
+        total += stars;
+        rows.push([t.text, display, stars]);
       }
     }
-    for(let day of appearanceDays) {
-      if(progress[`${role}_appearance_${day}`]) { rows.push([`Внешний вид ${day}`, '✅ Да', 5]); total += 5; }
+    
+    if (role === "pro") {
+      for (let day of appearanceDays) {
+        if (progress[`pro_appearance_${day}`]) { rows.push([`Внешний вид ${day}`, '✅ Да', 5]); total += 5; }
+      }
+      for (let w = 1; w <= 3; w++) {
+        if (progress[`pro_jimron_week${w}`]) { rows.push([`Джим Рон неделя ${w}`, '✅ Да', 15]); total += 15; }
+        if (progress[`pro_finance_week${w}`]) { rows.push([`Расширение границ неделя ${w}`, '✅ Да', 20]); total += 20; }
+      }
     }
-    for(let w=1; w<=3; w++) {
-      if(progress[`${role}_jimron_week${w}`]) { rows.push([`Джим Рон неделя ${w}`, '✅ Да', 15]); total += 15; }
-      if(progress[`${role}_finance_week${w}`]) { rows.push([`Расширение границ неделя ${w}`, '✅ Да', 20]); total += 20; }
-    }
+    
     rows.push([],['ИТОГО ЗВЁЗД', '', total]);
     
     const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(';')).join('\n');
@@ -606,7 +646,7 @@
     btn.addEventListener('click', () => {
       role = btn.dataset.role;
       saveAll();
-      setTasksByRole();
+      renderTasks();
       document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
     });
@@ -615,11 +655,11 @@
   ['fullname','status','discount','consultant','tabTeam'].forEach(id => {
     document.getElementById(id).addEventListener('input', () => saveAll());
   });
+
   document.getElementById('whatsappBtn').addEventListener('click', sendWhatsApp);
   document.getElementById('excelBtn').addEventListener('click', exportExcel);
 
   loadData();
-  setTasksByRole();
 </script>
 </body>
 </html>
