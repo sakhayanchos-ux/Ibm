@@ -4,10 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Бизнес-марафон — трекер заданий</title>
+  
+  <!-- ===== ИКОНКА (ставим ПОСЛЕ charset) ===== -->
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22%D0%91%D0%B8%D0%B7%D0%BD%D0%B5%D1%81%20%D0%BC%D0%B0%D1%80%D0%B0%D1%84%D0%BE%D0%BD%22%2C%22short_name%22%3A%22%D0%9C%D0%B0%D1%80%D0%B0%D1%84%D0%BE%D0%BD%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F5F7FA%22%2C%22theme_color%22%3A%22%23FF769A%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22icon.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Бизнес Марафон">
+  <meta name="apple-mobile-web-app-title" content="Бизнес марафон">
   <meta name="theme-color" content="#FF769A">
+  
+  <!-- дальше идут стили и остальной код -->
+</head>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -268,7 +276,7 @@
     </div>
     <div class="form-grid">
       <div class="form-field"><label>ФИО</label><input type="text" id="fullname" placeholder="Иванова Анна Петровна"></div>
-      <div class="form-field"><label>Статус (НП / Супервайзор / WT)</label><input type="text" id="status" placeholder="НП"></div>
+      <div class="form-field"><label>Статус (НП/Sv/WT)</label><input type="text" id="status" placeholder="НП/Sv/WT"></div>
       <div class="form-field"><label>Скидка (%)</label><input type="text" id="discount" inputmode="numeric" placeholder="0"></div>
       <div class="form-field"><label>Консультант</label><input type="text" id="consultant" placeholder="Имя консультанта"></div>
       <div class="form-field"><label>Вышестоящий Tab Team</label><input type="text" id="tabTeam" placeholder="Tab Team"></div>
@@ -278,11 +286,11 @@
   <div class="role-switch" id="roleSwitch">
     <div class="role-btn active" data-role="newbie">
       🍃 НОВИЧОК
-      <span class="role-hint">НП и новые супервайзоры</span>
+      <span class="role-hint">НП / новые Sv</span>
     </div>
     <div class="role-btn" data-role="pro">
       🔥 ОПЫТНЫЙ
-      <span class="role-hint">старые супервайзоры / WT</span>
+      <span class="role-hint">старые Sv / WT</span>
     </div>
   </div>
 
@@ -301,7 +309,7 @@
     <button class="btn-secondary" id="excelBtn">📎 Скачать Excel</button>
   </div>
   <footer>© 2026 · Разработчик Скрябина Сахаяна · 
-  <a href="https://wa.me/+7914260916" target="_blank" style="color:#FF769A; text-decoration:none;">📞 WhatsApp</a>
+  <a href="https://wa.me/+79142609616" target="_blank" style="color:#FF769A; text-decoration:none;">📞 WhatsApp</a>
   <br>
   <span style="font-size:0.6rem;">⚡ Данные сохраняются автоматически</span>
 </footer></footer>
